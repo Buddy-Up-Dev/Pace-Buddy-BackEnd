@@ -5,17 +5,19 @@ import { Post } from './post.entity';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor() {}
 
   public async getTrue(): Promise<Boolean> {
     return true;
   }
 
+  // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
   public async getAllLatestPost(): Promise<Post[]> {
     try {
       const res = await getRepository(Post)
-        .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex', 'p.exercise', 'p.condition', 'p.uploadDate'])
-        .where('p.feedOpen = 1').getMany();
+        .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
+          'p.exercise','p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
+        .where('p.feedOpen = 0').getMany();
       console.info(res);
 
       return res;
@@ -23,4 +25,6 @@ export class PostService {
       throw new Error(e);
     }
   }
+
+  // private async parseReturnData()
 }

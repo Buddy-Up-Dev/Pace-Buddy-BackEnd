@@ -5,7 +5,7 @@ type Post {
     exercise: Int!
     content: String!
     condition: Int!
-    feedOpen: Int!
+    feedOpen: Int
 }
 
 type PostData {

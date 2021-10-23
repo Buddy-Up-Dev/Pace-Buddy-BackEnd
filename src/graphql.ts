@@ -33,7 +33,7 @@ export class Post {
     exercise: number;
     content: string;
     condition: number;
-    feedOpen: number;
+    feedOpen?: Nullable<number>;
 }
 
 export class PostData {
