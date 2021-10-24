@@ -17,10 +17,16 @@ import { Post } from './post/post.entity';
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
       installSubscriptionHandlers: true,
+      context: () => {
+        const {request: req} = require('express')
+        return {
+          req
+        }
+      },
       definitions: {
         path: `${process.cwd() + '/src/graphql.ts'}`,
         outputAs: 'class',
-        emitTypenameField: true
+        emitTypenameField: true,
       }
     }),
     TypeOrmModule.forRoot({
