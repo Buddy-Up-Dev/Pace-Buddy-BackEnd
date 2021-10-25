@@ -1,0 +1,38 @@
+type Query{
+    getAllLatestPost(
+        flag: Int!
+    ): PostData!
+#    getSpecificExercise(
+#        flag: Int!
+#        exercise: Int!
+#    ): PostData!
+#    getMyPost: PostData!
+#    reporting: Int!
+#    getExercise: [Exercise!]
+#    getMyDate: [String!]
+#    userNickname: String!
+    userQuery: Boolean
+    postQuery: Boolean
+}
+
+type Mutation {
+#    naverLogin (
+#        accessToken: String!
+#    ): String!
+#    kakaoLogin (
+#        accessToken: String!
+#    ): String!
+#    likePost (
+#        postIndex: Int!
+#        isDuplicate: Boolean
+#    ): Boolean!
+#    addPost (
+#        uploadDate: String!
+#        exercise: Int!
+#        content: String!
+#        condition: Int!
+#        feedOpen: Int!
+#    ): Boolean!
+    userMutation: Boolean
+    postMutation: Boolean
+}
