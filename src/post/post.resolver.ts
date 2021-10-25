@@ -1,23 +1,32 @@
-import { Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import {PostService} from "./post.service";
 import {Post} from "./post.entity";
+import { UserModule } from "../user/user.module";
+import { UserService } from "../user/user.service";
+import { LikeService } from "../like/like.service"
 
 @Resolver()
 export class PostResolver {
-  constructor(private postService: PostService) {}
+  constructor(
+    private postService: PostService,
+    // private userService: UserService,
+    private likeService: LikeService
+  ) {}
 
   @Query('getAllLatestPost')
-  async getAllLatestPost(): Promise<Post[]> {
-    return await this.postService.getAllLatestPost();
+  async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number): Promise<Post[]> {
+
+    return await this.postService.getAllLatestPost(context, orderByFlag);
   }
 
   @Query('postQuery')
-  async userQuery(): Promise<Boolean> {
-    return this.postService.getTrue();
+  async userQuery(@Context() context:object, @Args('test') test:number,
+                  @Args('test_') test_:string): Promise<Boolean> {
+    return this.postService.getTrue(context, test, test_, this.likeService);
   }
 
-  @Mutation('postMutation')
-  async userMutation(): Promise<Boolean> {
-    return this.postService.getTrue();
-  }
+  // @Mutation('postMutation')
+  // async userMutation(@Context() context: object): Promise<Boolean> {
+  //   return this.postService.getTrue(context);
+  // }
 }

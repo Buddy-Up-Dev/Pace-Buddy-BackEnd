@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { PostModule } from './post/post.module';
+
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
+import { LikeModule } from './like/like.module';
+
 import { User } from './user/user.entity';
 import { Post } from './post/post.entity';
+import { Like } from './like/like.entity';
 
 @Module({
   imports: [
@@ -18,7 +23,7 @@ import { Post } from './post/post.entity';
       typePaths: ['./**/*.graphql'],
       installSubscriptionHandlers: true,
       context: () => {
-        const {request: req} = require('express')
+        const { request: req } = require('express');
         return {
           req
         }
@@ -36,10 +41,10 @@ import { Post } from './post/post.entity';
       username: process.env.NAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [User, Post],
+      entities: [User, Post, Like],
       synchronize: true
     }),
-    UserModule, PostModule
+    UserModule, PostModule, LikeModule
   ],
   controllers: [AppController],
   providers: [AppService],

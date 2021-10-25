@@ -14,7 +14,7 @@ export abstract class IQuery {
 
     abstract userQuery(): Nullable<boolean> | Promise<Nullable<boolean>>;
 
-    abstract postQuery(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    abstract postQuery(test: number, test_: string): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export abstract class IMutation {

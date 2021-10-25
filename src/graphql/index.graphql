@@ -12,7 +12,7 @@ type Query{
 #    getMyDate: [String!]
 #    userNickname: String!
     userQuery: Boolean
-    postQuery: Boolean
+    postQuery(test: Int! test_: String!): Boolean
 }
 
 type Mutation {
