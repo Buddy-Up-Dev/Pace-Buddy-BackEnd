@@ -9,12 +9,4 @@ export class User {
   @Column({length: 600}) naverID: string;
   @Column({length: 600}) kakaoID: string;
 
-  getUserInfo() {
-    return {
-      userIndex: this.userIndex,
-      userName: this.userName,
-      naverID: this.naverID,
-      kakaoID: this.kakaoID
-    }
-  }
 }
