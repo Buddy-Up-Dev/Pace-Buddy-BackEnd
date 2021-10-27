@@ -39,7 +39,6 @@ export class PostService {
 
       let returnData: { likeArray: number[]; PostData: PostInfomation[] } = await this.parseReturnData(allLatestPost, userIndex);
       if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
-
       return returnData;
     } catch (e) {
       throw new Error(e);
@@ -72,12 +71,14 @@ export class PostService {
   }
 
   async getLikeCount(userIndex: number): Promise<number[]> {
+    console.info(userIndex);
     const returnLike: number[] = [];
     const likeArray: Like[] = await getRepository(Like)
       .createQueryBuilder('l').select('*')
-      .where('l.userIndex = userIndex', {userIndex: userIndex})
+      .where('l.userIndex = :userIndex', { userIndex: userIndex })
       .getMany();
 
+    console.info(likeArray);
     for (const node of likeArray) {
       returnLike.push(node.postIndex);
     }
