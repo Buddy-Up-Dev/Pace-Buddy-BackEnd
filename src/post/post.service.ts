@@ -25,7 +25,7 @@ export class PostService {
     return true;
   }
 
-  // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
+  // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음, p.feedOpen = 1로 나중에 변경
   public async getAllLatestPost(context: object, orderByFlag: number): Promise<{ likeArray: number[]; PostData: PostInfomation[] }> {
     let userIndex: number = 1;
     // @ts-ignore
@@ -51,7 +51,7 @@ export class PostService {
       returnData.push({
         Post: node,
         User: await getRepository(User)
-          .createQueryBuilder('u').select('*')
+          .createQueryBuilder('u').select(['u.userIndex', 'u.userName', 'u.naverID', 'u.kakaoID'])
           .where('u.userIndex = :userIndex', {userIndex: node.userIndex}).getOne(),
         Like: await getRepository(Like)
           .createQueryBuilder('l').select('*')
