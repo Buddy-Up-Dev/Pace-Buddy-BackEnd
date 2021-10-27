@@ -9,11 +9,11 @@ type Post {
 }
 
 type PostData {
-    PostData: [PostInfomation]!
+    PostData: [PostInformation]!
     likeArray: [Int!]
 }
 
-type PostInfomation {
+type PostInformation {
     Post: Post!
     User: User!
     Like: Int!

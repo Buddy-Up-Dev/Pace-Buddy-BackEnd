@@ -7,7 +7,7 @@ import { Like } from "../like/like.entity";
 
 import { LikeService } from "../like/like.service";
 import { PostDataDto } from "./DTO/post-data-dto";
-import { PostInfomation } from "../graphql";
+import { PostInformation } from "../graphql";
 
 @Injectable()
 export class PostService {
@@ -26,7 +26,7 @@ export class PostService {
   }
 
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
-  public async getAllLatestPost(context: object, orderByFlag: number): Promise<{ likeArray: number[]; PostData: PostInfomation[] }> {
+  public async getAllLatestPost(context: object, orderByFlag: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     let userIndex: number = 1;
     // @ts-ignore
     // const token: string = context.req.headers['authorization'];
@@ -35,9 +35,8 @@ export class PostService {
       const allLatestPost: Post[] = await getRepository(Post)
         .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
           'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
-        .where('p.feedOpen = 0').getMany();
-
-      let returnData: { likeArray: number[]; PostData: PostInfomation[] } = await this.parseReturnData(allLatestPost, userIndex);
+        .where('p.feedOpen = 1').getMany();
+      let returnData: { likeArray: number[]; PostData: PostInformation[] } = await this.parseReturnData(allLatestPost, userIndex);
       if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
       return returnData;
     } catch (e) {
@@ -45,13 +44,31 @@ export class PostService {
     }
   }
 
-  private async parseReturnData(data: Post[], userIndex: number): Promise<{ likeArray: number[]; PostData: PostInfomation[] }> {
+  public async getSpecificExercise(context: object, orderByFlag: number, exercise: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+    let userIndex: number = 1;
+    // @ts-ignore
+    try {
+      const specificPost: Post[] = await getRepository(Post)
+          .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
+            'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
+          .where('p.feedOpen = 1')
+          .andWhere('p.exercise = :exercise', { exercise: exercise })
+          .getMany();
+      let returnData: { likeArray: number[]; PostData: PostInformation[] } = await this.parseReturnData(specificPost, userIndex);
+      if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
+      return returnData;
+    } catch(e) {
+      throw new Error(e);
+    }
+  }
+
+  private async parseReturnData(data: Post[], userIndex: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     const returnData: object[] = [];
     for (const node of data) {
       returnData.push({
         Post: node,
         User: await getRepository(User)
-          .createQueryBuilder('u').select('*')
+          .createQueryBuilder('u').select(['u.userIndex', 'u.userName', 'u.naverID', 'u.kakaoID'])
           .where('u.userIndex = :userIndex', {userIndex: node.userIndex}).getOne(),
         Like: await getRepository(Like)
           .createQueryBuilder('l').select('*')
@@ -71,18 +88,14 @@ export class PostService {
   }
 
   async getLikeCount(userIndex: number): Promise<number[]> {
-    console.info(userIndex);
     const returnLike: number[] = [];
     const likeArray: Like[] = await getRepository(Like)
-      .createQueryBuilder('l').select('*')
+      .createQueryBuilder('l').select('l.postIndex')
       .where('l.userIndex = :userIndex', { userIndex: userIndex })
       .getMany();
-
-    console.info(likeArray);
     for (const node of likeArray) {
       returnLike.push(node.postIndex);
     }
-    console.info(returnLike);
     return returnLike;
   }
 }
