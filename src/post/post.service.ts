@@ -71,18 +71,14 @@ export class PostService {
   }
 
   async getLikeCount(userIndex: number): Promise<number[]> {
-    console.info(userIndex);
     const returnLike: number[] = [];
     const likeArray: Like[] = await getRepository(Like)
-      .createQueryBuilder('l').select('*')
+      .createQueryBuilder('l').select('l.postIndex')
       .where('l.userIndex = :userIndex', { userIndex: userIndex })
       .getMany();
-
-    console.info(likeArray);
     for (const node of likeArray) {
       returnLike.push(node.postIndex);
     }
-    console.info(returnLike);
     return returnLike;
   }
 }
