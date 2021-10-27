@@ -1,8 +1,8 @@
 import { PostData } from "../../graphql";
-import { PostInfomation } from "../../graphql";
+import { PostInformation } from "../../graphql";
 
 export class PostDataDto extends PostData {
-  PostData: PostInfomation[];
+  PostData: PostInformation[];
   likeArray: number[];
   constructor(post, like) {
     super();

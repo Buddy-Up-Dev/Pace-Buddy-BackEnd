@@ -12,6 +12,8 @@ export abstract class IQuery {
 
     abstract getAllLatestPost(flag: number): PostData | Promise<PostData>;
 
+    abstract getSpecificExercise(flag: number, exercise: number): PostData | Promise<PostData>;
+
     abstract userQuery(): Nullable<boolean> | Promise<Nullable<boolean>>;
 
     abstract postQuery(test: number, test_: string): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -38,12 +40,12 @@ export class Post {
 
 export class PostData {
     __typename?: 'PostData';
-    PostData: Nullable<PostInfomation>[];
+    PostData: Nullable<PostInformation>[];
     likeArray?: Nullable<number[]>;
 }
 
-export class PostInfomation {
-    __typename?: 'PostInfomation';
+export class PostInformation {
+    __typename?: 'PostInformation';
     Post: Post;
     User: User;
     Like: number;

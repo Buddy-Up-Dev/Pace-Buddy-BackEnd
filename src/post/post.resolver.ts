@@ -5,7 +5,7 @@ import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service"
 import { PostDataDto} from "./DTO/post-data-dto";
-import { PostInfomation } from "../graphql";
+import { PostInformation } from "../graphql";
 
 @Resolver()
 export class PostResolver {
@@ -17,9 +17,15 @@ export class PostResolver {
 
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
-    Promise<{ likeArray: number[]; PostData: PostInfomation[] }> {
+      Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
 
     return await this.postService.getAllLatestPost(context, orderByFlag);
+  }
+
+  @Query('getSpecificExercise')
+  async getSpecificExercise(@Context() context: object, @Args('flag') orderByFlag: number, @Args('exercise') exercise: number):
+    Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+    return await this.postService.getSpecificExercise(context, orderByFlag, exercise);
   }
 
   @Query('postQuery')
