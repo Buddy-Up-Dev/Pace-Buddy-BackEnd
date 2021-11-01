@@ -6,8 +6,8 @@ type Query{
         flag: Int!
         exercise: Int!
     ): PostData!
-#    getMyPost: PostData!
-#    reporting: Int!
+    getMyPost: PostData!
+    reporting: Int!
 #    getExercise: [Exercise!]
 #    getMyDate: [String!]
 #    userNickname: String!

@@ -62,6 +62,22 @@ export class PostService {
     }
   }
 
+  public async getMyPost(context: object): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+    let userIndex: number = 1;
+    // @ts-ignore
+    try {
+      const allMyPost: Post[] = await getRepository(Post)
+          .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
+            'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
+          .where('p.feedOpen = 1')
+          .andWhere('p.userIndex = :userIndex', { userIndex: userIndex })
+          .getMany();
+      return await this.parseReturnData(allMyPost, userIndex);
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
   private async parseReturnData(data: Post[], userIndex: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     const returnData: object[] = [];
     for (const node of data) {
@@ -98,5 +114,18 @@ export class PostService {
     }
     return returnLike;
   }
-}
 
+//   async addNewPost (token: string, uploadData: string, exercise: number, content: string, condition: number,
+//                         feedOpen: number): Promise<Boolean> {
+//     let userIndex = -1;
+//
+//     // TODO: JWT Logic
+//
+//     try {
+//
+//     }
+//
+//     return true;
+//   }
+// }
+}
