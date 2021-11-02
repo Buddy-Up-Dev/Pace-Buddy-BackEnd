@@ -17,8 +17,7 @@ export class PostResolver {
 
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
-      Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-
+    Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     return await this.postService.getAllLatestPost(context, orderByFlag);
   }
 
@@ -39,6 +38,14 @@ export class PostResolver {
 //   Promise<> {
 //     return await this.postService.reporting(context);
 // }
+
+  // { exerciseIndex: number[]; name: string[] }
+
+  @Query('getExercise')
+  async getExercise(@Context() context: object):
+    Promise<{ Index: number[]; Name: string[] }> {
+    return await this.postService.getExercise(context);
+  }
 
   // @Mutation('addPost')
   // async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string,

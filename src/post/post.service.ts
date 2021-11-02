@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { getRepository } from "typeorm";
 
-import { Post } from "./post.entity";
+import { Post, Exercise } from "./post.entity";
 import { User } from "../user/user.entity";
 import { Like } from "../like/like.entity";
 
@@ -13,24 +13,11 @@ import { PostInformation } from "../graphql";
 export class PostService {
   constructor() {}
 
-  public async getTrue(context: object, test: number, test_: string, likeService: LikeService): Promise<Boolean> {
-    // @ts-ignore
-    const allLatestPost: Post[] = await getRepository(Post)
-      .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
-        'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
-      .where('p.feedOpen = 0').getMany();
-
-    console.info(allLatestPost);
-    console.info(await likeService.getLike(1));
-    return true;
-  }
-
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
   public async getAllLatestPost(context: object, orderByFlag: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     let userIndex: number = 1;
     // @ts-ignore
     // const token: string = context.req.headers['authorization'];
-
     try {
       const allLatestPost: Post[] = await getRepository(Post)
         .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
@@ -74,6 +61,31 @@ export class PostService {
           .getMany();
       return await this.parseReturnData(allMyPost, userIndex);
     } catch (e) {
+    }
+  }
+
+  // public async reporting(context: object): Promise<> {
+  //   let userIndex: number = 1;
+  //   // @ts-ignore
+  //   try {
+  //     const reporting:
+  //   } catch(e) {
+  //     throw new Error(e);
+  //   }
+  // }
+
+  public async getExercise(context: object): Promise<{ Index: number[]; Name: string[] }> {
+    try {
+      const exercise: Exercise[] = await getRepository(Exercise)
+          .createQueryBuilder('e').select(['e.exerciseIndex', 'e.exerciseName']).getMany();
+      const exerciseIndex: number[] = [];
+      const name: string[] = [];
+      for (const node of exercise) {
+        exerciseIndex.push(node.exerciseIndex);
+        name.push(node.exerciseName);
+      }
+      return { Index: exerciseIndex, Name: name };
+    } catch(e) {
       throw new Error(e);
     }
   }

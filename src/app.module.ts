@@ -11,7 +11,7 @@ import { PostModule } from './post/post.module';
 import { LikeModule } from './like/like.module';
 
 import { User } from './user/user.entity';
-import { Post } from './post/post.entity';
+import { Post, Exercise } from './post/post.entity';
 import { Like } from './like/like.entity';
 
 @Module({
@@ -41,7 +41,7 @@ import { Like } from './like/like.entity';
       username: process.env.NAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [User, Post, Like],
+      entities: [User, Post, Like, Exercise],
       synchronize: true
     }),
     UserModule, PostModule, LikeModule

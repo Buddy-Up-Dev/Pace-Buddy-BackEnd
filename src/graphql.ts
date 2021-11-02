@@ -14,6 +14,10 @@ export abstract class IQuery {
 
     abstract getSpecificExercise(flag: number, exercise: number): PostData | Promise<PostData>;
 
+    abstract getMyPost(): PostData | Promise<PostData>;
+
+    abstract getExercise(): Exercise | Promise<Exercise>;
+
     abstract userQuery(): Nullable<boolean> | Promise<Nullable<boolean>>;
 
     abstract postQuery(test: number, test_: string): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -49,6 +53,12 @@ export class PostInformation {
     Post: Post;
     User: User;
     Like: number;
+}
+
+export class Exercise {
+    __typename?: 'Exercise';
+    Index: Nullable<number>[];
+    Name: Nullable<string>[];
 }
 
 export class User {

@@ -18,3 +18,8 @@ type PostInformation {
     User: User!
     Like: Int!
 }
+
+type Exercise {
+    Index: [Int]!
+    Name: [String]!
+}
