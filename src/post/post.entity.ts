@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({name: "Post", schema: "Post"})
-
 export class Post {
   @PrimaryGeneratedColumn()
   postIndex: number;
@@ -23,5 +22,13 @@ export class Post {
 
   @Column()
   feedOpen: number;
+}
 
+@Entity({name: "Exercise", schema: "Exercise"})
+export class Exercise {
+  @PrimaryGeneratedColumn()
+  exerciseIndex: number;
+
+  @Column({length: 45})
+  exerciseName: string;
 }
