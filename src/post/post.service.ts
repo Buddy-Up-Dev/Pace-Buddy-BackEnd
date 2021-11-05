@@ -127,17 +127,20 @@ export class PostService {
     return returnLike;
   }
 
-//   async addNewPost (token: string, uploadData: string, exercise: number, content: string, condition: number,
-//                         feedOpen: number): Promise<Boolean> {
-//     let userIndex = -1;
-//
-//     // TODO: JWT Logic
-//
-//     try {
-//
-//     }
-//
-//     return true;
-//   }
-// }
+  async reporting(context: object): Promise<number> {
+    let userIndex = -1;
+    // TODO: JWT Decode 추후 추가 예정
+    // TODO: 여기서 Entity가 필요하다고 한거구나
+
+    return 1;
+  }
+
+  async addNewPost (token: string, uploadData: string, exercise: number, content: string, condition: number,
+                        feedOpen: number): Promise<Boolean> {
+    let userIndex = -1;
+
+    // TODO: JWT Logic
+
+    return true;
+  }
 }

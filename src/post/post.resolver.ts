@@ -27,19 +27,16 @@ export class PostResolver {
     return await this.postService.getSpecificExercise(context, orderByFlag, exercise);
   }
 
-  @Query('getMyPost')
+  @Query("getMyPost")
   async getMyPost(@Context() context: object):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     return await this.postService.getMyPost(context);
   }
 
-// @Query('reporting')
-// async reporting(@Context() context: object):
-//   Promise<> {
-//     return await this.postService.reporting(context);
-// }
-
-  // { exerciseIndex: number[]; name: string[] }
+  @Query("reporting")
+  async reporting(@Context() context: object): Promise<number> {
+    return await this.postService.reporting(context);
+  }
 
   @Query('getExercise')
   async getExercise(@Context() context: object):
@@ -47,15 +44,15 @@ export class PostResolver {
     return await this.postService.getExercise(context);
   }
 
-  // @Mutation('addPost')
-  // async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string,
-  //               @Args('exercise') exercise: number, @Args('content') content: string,
-  //               @Args('condition') condition: number, @Args('feedOpen') feedOpen: number): Promise<Boolean> {
-  //
-  //
-  //   return await this.postService.addNewPost(context["req"].headers["authorization"],
-  //       uploadDate, exercise, content, condition, feedOpen);
-  // }
+  @Mutation('addPost')
+  async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string,
+                @Args('exercise') exercise: number, @Args('content') content: string,
+                @Args('condition') condition: number, @Args('feedOpen') feedOpen: number): Promise<Boolean> {
+
+
+    return await this.postService.addNewPost(context["req"].headers["authorization"],
+        uploadDate, exercise, content, condition, feedOpen);
+  }
 
   // @Mutation('postMutation')
   // async userMutation(@Context() context: object): Promise<Boolean> {
