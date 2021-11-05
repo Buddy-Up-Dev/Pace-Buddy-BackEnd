@@ -16,7 +16,7 @@ export abstract class IQuery {
 
     abstract getMyPost(): PostData | Promise<PostData>;
 
-    abstract getExercise(): Exercise | Promise<Exercise>;
+    abstract getExercise(): Nullable<Exercise>[] | Promise<Nullable<Exercise>[]>;
 
     abstract reporting(): number | Promise<number>;
 
@@ -63,8 +63,8 @@ export class PostInformation {
 
 export class Exercise {
     __typename?: 'Exercise';
-    Index: Nullable<number>[];
-    Name: Nullable<string>[];
+    exerciseIndex: number;
+    name: string;
 }
 
 export class User {

@@ -1,5 +1,6 @@
 import { Resolver, Query, Context } from "@nestjs/graphql";
 import { ExerciseService } from "./exercise.service";
+import { Exercise } from "./exercise.entity";
 
 @Resolver()
 export class ExerciseResolver {
@@ -7,7 +8,7 @@ export class ExerciseResolver {
 
   @Query('getExercise')
   async getExercise(@Context() context: object):
-    Promise<{ Index: number[]; Name: string[] }> {
+    Promise<Exercise[]> {
     return await this.exerciseService.getExercise(context);
   }
 

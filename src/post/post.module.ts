@@ -6,7 +6,6 @@ import { LikeService } from "../like/like.service";
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Post } from "./post.entity";
 
-
 @Module({
   imports: [TypeOrmModule.forFeature([Post])],
   providers: [PostService, PostResolver, UserService, LikeService]

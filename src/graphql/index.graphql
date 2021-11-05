@@ -7,7 +7,7 @@ type Query{
         exercise: Int!
     ): PostData!
     getMyPost: PostData!
-    getExercise: Exercise!
+    getExercise: [Exercise]!
     reporting: Int!
 #    getMyDate: [String!]
 #    userNickname: String!

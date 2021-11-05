@@ -44,7 +44,6 @@ import { ExerciseModule } from './exercise/exercise.module';
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
       entities: [User, Post, Like, Exercise],
-      synchronize: true
     }),
     UserModule, PostModule, LikeModule, ExerciseModule
   ],

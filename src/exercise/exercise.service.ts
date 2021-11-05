@@ -1,24 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { Exercise } from "./exercise.entity";
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class ExerciseService {
+  constructor(@InjectRepository(Exercise) private exerciseRepository: Repository<Exercise>) {
+    this.exerciseRepository = exerciseRepository;
+  }
 
-  public async getExercise(context: object): Promise<{ Index: number[]; Name: string[] }> {
+  public async getExercise(context: object): Promise<Exercise[]> {
     try {
       const exercise: Exercise[] = await getRepository(Exercise)
         .createQueryBuilder('e').select(['e.exerciseIndex', 'e.exerciseName']).getMany();
-      const exerciseIndex: number[] = [];
-      const name: string[] = [];
-      for (const node of exercise) {
-        exerciseIndex.push(node.exerciseIndex);
-        name.push(node.exerciseName);
-      }
-      return { Index: exerciseIndex, Name: name };
+
+      // const exercise = await this.exerciseRepository.find();
+
+      // const exerciseIndex: number[] = [];
+      // const name: string[] = [];
+      // for (const node of exercise) {
+      //   exerciseIndex.push(node.exerciseIndex);
+      //   name.push(node.exerciseName);
+      // }
+      return exercise;
     } catch(e) {
       throw new Error(e);
     }
   }
-
 }

@@ -12,30 +12,37 @@ import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service";
 import { InjectRepository } from "@nestjs/typeorm";
 
-
 @Injectable()
 export class PostService {
-  constructor(@InjectRepository(Post) private postRepository: Repository<Post>) {
+  constructor(
+    @InjectRepository(Post) private postRepository: Repository<Post>,
+    private userService: UserService,
+    private likeService: LikeService
+  ) {
     this.postRepository = postRepository
   }
 
-  public async testORM(): Promise<Post[]> {
-    const test = await this.postRepository.find();
+  public async testORM(): Promise<any> {
+    // const test = await this.userService.getUserRepository().find();
     console.info(test);
     return test;
   }
+
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
-  public async getAllLatestPost(context: object, orderByFlag: number, userService: UserService, likeService: LikeService)
+  public async getAllLatestPost(context: object, orderByFlag: number)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+    await this.userService.getTrue()
     let userIndex: number = 1;
 
     // TODO: JWT Logic
 
     try {
-      const allLatestPost: Post[] = await getRepository(Post)
-        .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
-          'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
-        .where('p.feedOpen = 1').getMany();
+      // const allLatestPost: Post[] = await getRepository(Post)
+      //   .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
+      //     'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
+      //   .where('p.feedOpen = 1').getMany();
+
+      const allLatestPost = await this.postRepository.find();
       let returnData: { likeArray: number[]; PostData: PostInformation[] } = await this.parseReturnData(allLatestPost, userIndex);
       if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
       return returnData;

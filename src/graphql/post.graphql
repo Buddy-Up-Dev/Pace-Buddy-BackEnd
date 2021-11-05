@@ -20,6 +20,6 @@ type PostInformation {
 }
 
 type Exercise {
-    Index: [Int]!
-    Name: [String]!
+    exerciseIndex: Int!
+    name: String!
 }
