@@ -1,10 +1,7 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import {PostService} from "./post.service";
-import {Post} from "./post.entity";
-import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service"
-import { PostDataDto} from "./DTO/post-data-dto";
 import { PostInformation } from "../graphql";
 
 @Resolver()

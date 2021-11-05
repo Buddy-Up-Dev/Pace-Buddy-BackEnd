@@ -16,8 +16,9 @@ export class PostService {
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
   public async getAllLatestPost(context: object, orderByFlag: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     let userIndex: number = 1;
-    // @ts-ignore
-    // const token: string = context.req.headers['authorization'];
+
+    // TODO: JWT Logic
+
     try {
       const allLatestPost: Post[] = await getRepository(Post)
         .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
