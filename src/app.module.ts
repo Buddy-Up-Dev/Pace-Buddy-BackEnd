@@ -11,8 +11,9 @@ import { PostModule } from './post/post.module';
 import { LikeModule } from './like/like.module';
 
 import { User } from './user/user.entity';
-import { Post, Exercise } from './post/post.entity';
+import { Post } from './post/post.entity';
 import { Like } from './like/like.entity';
+import { Exercise } from "./exercise/exercise.entity";
 import { ExerciseModule } from './exercise/exercise.module';
 
 @Module({

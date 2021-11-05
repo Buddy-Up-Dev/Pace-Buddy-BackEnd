@@ -18,13 +18,19 @@ export abstract class IQuery {
 
     abstract getExercise(): Exercise | Promise<Exercise>;
 
+    abstract reporting(): number | Promise<number>;
+
     abstract userQuery(): Nullable<boolean> | Promise<Nullable<boolean>>;
 
     abstract postQuery(test: number, test_: string): Nullable<boolean> | Promise<Nullable<boolean>>;
+
+    abstract testORM(): Nullable<Nullable<Post>[]> | Promise<Nullable<Nullable<Post>[]>>;
 }
 
 export abstract class IMutation {
     __typename?: 'IMutation';
+
+    abstract addPost(uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 
     abstract userMutation(): Nullable<boolean> | Promise<Nullable<boolean>>;
 

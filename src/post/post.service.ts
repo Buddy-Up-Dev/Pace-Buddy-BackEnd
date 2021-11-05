@@ -20,7 +20,7 @@ export class PostService {
   }
 
   public async testORM(): Promise<Post[]> {
-    const test = this.postRepository.find();
+    const test = await this.postRepository.find();
     console.info(test);
     return test;
   }

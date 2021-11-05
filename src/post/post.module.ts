@@ -4,7 +4,7 @@ import { UserService } from '../user/user.service'
 import { PostResolver } from './post.resolver';
 import { LikeService } from "../like/like.service";
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Post } from "../graphql";
+import { Post } from "./post.entity";
 
 
 @Module({

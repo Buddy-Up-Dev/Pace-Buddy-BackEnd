@@ -8,7 +8,7 @@ type Query{
     ): PostData!
     getMyPost: PostData!
     getExercise: Exercise!
-#    reporting: Int!
+    reporting: Int!
 #    getMyDate: [String!]
 #    userNickname: String!
     userQuery: Boolean
@@ -27,13 +27,13 @@ type Mutation {
 #        postIndex: Int!
 #        isDuplicate: Boolean
 #    ): Boolean!
-#    addPost (
-#        uploadDate: String!
-#        exercise: Int!
-#        content: String!
-#        condition: Int!
-#        feedOpen: Int!
-#    ): Boolean!
+    addPost (
+        uploadDate: String!
+        exercise: Int!
+        content: String!
+        condition: Int!
+        feedOpen: Int!
+    ): Boolean!
     userMutation: Boolean
     postMutation: Boolean
 }

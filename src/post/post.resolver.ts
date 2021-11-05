@@ -40,12 +40,6 @@ export class PostResolver {
     return await this.postService.reporting(context);
   }
 
-  @Query('getExercise')
-  async getExercise(@Context() context: object):
-    Promise<{ Index: number[]; Name: string[] }> {
-    return await this.postService.getExercise(context);
-  }
-
   @Mutation('addPost')
   async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string,
                 @Args('exercise') exercise: number, @Args('content') content: string,
