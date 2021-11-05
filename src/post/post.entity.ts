@@ -23,12 +23,3 @@ export class Post {
   @Column()
   feedOpen: number;
 }
-
-@Entity({name: "Exercise", schema: "Exercise"})
-export class Exercise {
-  @PrimaryGeneratedColumn()
-  exerciseIndex: number;
-
-  @Column({length: 45})
-  exerciseName: string;
-}

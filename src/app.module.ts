@@ -13,6 +13,7 @@ import { LikeModule } from './like/like.module';
 import { User } from './user/user.entity';
 import { Post, Exercise } from './post/post.entity';
 import { Like } from './like/like.entity';
+import { ExerciseModule } from './exercise/exercise.module';
 
 @Module({
   imports: [
@@ -44,7 +45,7 @@ import { Like } from './like/like.entity';
       entities: [User, Post, Like, Exercise],
       synchronize: true
     }),
-    UserModule, PostModule, LikeModule
+    UserModule, PostModule, LikeModule, ExerciseModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,7 +4,9 @@ import { Like } from './like.entity';
 
 @Injectable()
 export class LikeService {
-  constructor() {}
+  constructor() {
+
+  }
 
   async getLike(postIndex: number): Promise<number> {
     try {
