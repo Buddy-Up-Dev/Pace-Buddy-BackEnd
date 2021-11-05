@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import { Exercise } from "./exercise.entity";
 import { getRepository, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -11,9 +11,6 @@ export class ExerciseService {
 
   public async getExercise(context: object): Promise<Exercise[]> {
     try {
-      const exercise: Exercise[] = await getRepository(Exercise)
-        .createQueryBuilder('e').select(['e.exerciseIndex', 'e.exerciseName']).getMany();
-
       // const exercise = await this.exerciseRepository.find();
 
       // const exerciseIndex: number[] = [];
@@ -22,7 +19,8 @@ export class ExerciseService {
       //   exerciseIndex.push(node.exerciseIndex);
       //   name.push(node.exerciseName);
       // }
-      return exercise;
+      return await getRepository(Exercise)
+        .createQueryBuilder('e').select(['e.exerciseIndex', 'e.exerciseName']).getMany();
     } catch(e) {
       throw new Error(e);
     }

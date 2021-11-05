@@ -3,7 +3,7 @@ import { UserService } from './user.service'
 import { User } from './user.entity'
 import { PostService } from "../post/post.service";
 
-@Resolver(User)
+@Resolver()
 export class UserResolver {
   constructor(private userService: UserService) {}
 
