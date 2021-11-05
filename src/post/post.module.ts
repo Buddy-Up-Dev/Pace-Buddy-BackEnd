@@ -4,10 +4,11 @@ import { UserService } from '../user/user.service'
 import { PostResolver } from './post.resolver';
 import { LikeService } from "../like/like.service";
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { Post } from "../graphql";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([])],
+  imports: [TypeOrmModule.forFeature([Post])],
   providers: [PostService, PostResolver, UserService, LikeService]
 })
 export class PostModule {}

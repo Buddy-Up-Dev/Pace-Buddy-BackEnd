@@ -13,6 +13,7 @@ type Query{
 #    userNickname: String!
     userQuery: Boolean
     postQuery(test: Int! test_: String!): Boolean
+    testORM: [Post]
 }
 
 type Mutation {

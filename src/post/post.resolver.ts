@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import {PostService} from "./post.service";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service"
-import { PostInformation } from "../graphql";
+import { Post, PostInformation } from "../graphql";
 
 @Resolver()
 export class PostResolver {
@@ -12,10 +12,15 @@ export class PostResolver {
     private likeService: LikeService
   ) {}
 
+  @Query('testORM')
+  async testOrm(): Promise<Post[]> {
+    return await this.postService.testORM();
+  }
+
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getAllLatestPost(context, orderByFlag);
+    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService);
   }
 
   @Query('getSpecificExercise')

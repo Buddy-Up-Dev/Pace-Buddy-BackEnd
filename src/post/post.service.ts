@@ -1,20 +1,32 @@
 import { Injectable } from "@nestjs/common";
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 
 import { Post, Exercise } from "./post.entity";
 import { User } from "../user/user.entity";
 import { Like } from "../like/like.entity";
 
-import { LikeService } from "../like/like.service";
 import { PostDataDto } from "./DTO/post-data-dto";
 import { PostInformation } from "../graphql";
 
+import { UserService } from "../user/user.service";
+import { LikeService } from "../like/like.service";
+import { InjectRepository } from "@nestjs/typeorm";
+
+
 @Injectable()
 export class PostService {
-  constructor() {}
+  constructor(@InjectRepository(Post) private postRepository: Repository<Post>) {
+    this.postRepository = postRepository
+  }
 
+  public async testORM(): Promise<Post[]> {
+    const test = this.postRepository.find();
+    console.info(test);
+    return test;
+  }
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
-  public async getAllLatestPost(context: object, orderByFlag: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+  public async getAllLatestPost(context: object, orderByFlag: number, userService: UserService, likeService: LikeService)
+    : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     let userIndex: number = 1;
 
     // TODO: JWT Logic
