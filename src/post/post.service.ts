@@ -22,6 +22,7 @@ export class PostService {
 
   public async testORM(): Promise<any> {
     // const test = await this.userService.getUserRepository().find();
+    const test = await this.postRepository.find();
     console.info(test);
     return test;
   }

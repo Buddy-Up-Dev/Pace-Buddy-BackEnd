@@ -19,8 +19,13 @@ export class ExerciseService {
       //   exerciseIndex.push(node.exerciseIndex);
       //   name.push(node.exerciseName);
       // }
-      return await getRepository(Exercise)
-        .createQueryBuilder('e').select(['e.exerciseIndex', 'e.exerciseName']).getMany();
+
+      const res =  await this.exerciseRepository.find();
+      console.info(res);
+      return res;
+      // return await getRepository(Exercise)
+      //   .createQueryBuilder('e').select(['e.exerciseIndex', 'e.exerciseName']).getMany()
+
     } catch(e) {
       throw new Error(e);
     }

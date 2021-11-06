@@ -64,7 +64,7 @@ export class PostInformation {
 export class Exercise {
     __typename?: 'Exercise';
     exerciseIndex: number;
-    name: string;
+    exerciseName: string;
 }
 
 export class User {
