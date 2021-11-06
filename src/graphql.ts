@@ -57,8 +57,8 @@ export class PostData {
 export class PostInformation {
     __typename?: 'PostInformation';
     Post: Post;
-    User: User;
-    Like: number;
+    User?: Nullable<User>;
+    Like?: Nullable<number>;
 }
 
 export class Exercise {
@@ -69,8 +69,8 @@ export class Exercise {
 
 export class User {
     __typename?: 'User';
-    userIndex: number;
-    userName: string;
+    userIndex?: Nullable<number>;
+    userName?: Nullable<string>;
     naverID?: Nullable<string>;
     kakaoID?: Nullable<string>;
 }

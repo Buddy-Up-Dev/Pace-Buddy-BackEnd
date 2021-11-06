@@ -12,11 +12,6 @@ export class PostResolver {
     private likeService: LikeService
   ) {}
 
-  @Query('testORM')
-  async testOrm(): Promise<Post[]> {
-    return await this.postService.testORM(this.userService, this.likeService);
-  }
-
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {

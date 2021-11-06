@@ -1,6 +1,6 @@
 type User{
-    userIndex: Int!
-    userName: String!
+    userIndex: Int
+    userName: String
     naverID: String
     kakaoID: String
 }

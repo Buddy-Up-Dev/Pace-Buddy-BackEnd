@@ -17,7 +17,7 @@ export class UserService {
     return true;
   }
 
-  public async getUserInformation(): Promise<object> {
-    return this.userRepository.find();
+  public async getUser(userIndex: number): Promise<object> {
+    return this.userRepository.findOne({ userIndex: userIndex });
   }
 }

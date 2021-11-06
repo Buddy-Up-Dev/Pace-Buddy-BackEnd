@@ -13,10 +13,11 @@ type PostData {
     likeArray: [Int!]
 }
 
+# 추후 필수값 변경요망
 type PostInformation {
     Post: Post!
-    User: User!
-    Like: Int!
+    User: User
+    Like: Int
 }
 
 type Exercise {
