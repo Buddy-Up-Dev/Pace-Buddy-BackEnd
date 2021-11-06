@@ -28,7 +28,6 @@ export class PostService {
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
   public async getAllLatestPost(context: object, orderByFlag: number, userService: any, likeService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    console.info(await userService.getUserRepository());
     let userIndex: number = 1;
 
     // TODO: JWT Logic
@@ -87,6 +86,7 @@ export class PostService {
       returnData.push({
         Post: node,
         User: userService.getUserInformation(),
+        Like: likeService.getLike(node.postIndex)
         // User: await getRepository(User)
         //   .createQueryBuilder('u').select(['u.userIndex', 'u.userName', 'u.naverID', 'u.kakaoID'])
         //   .where('u.userIndex = :userIndex', {userIndex: node.userIndex}).getOne(),

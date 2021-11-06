@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from "typeorm";
 
-import { Post } from "../post/post.entity";
 import { User } from "./user.entity";
 
 import { InjectRepository } from "@nestjs/typeorm";
@@ -21,5 +20,4 @@ export class UserService {
   public async getUserInformation(): Promise<object> {
     return this.userRepository.find();
   }
-
 }
