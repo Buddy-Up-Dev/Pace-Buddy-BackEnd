@@ -41,14 +41,13 @@ export class PostResolver {
   }
 
   @Mutation('addPost')
-  async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string,
-                @Args('exercise') exercise: number, @Args('content') content: string,
-                @Args('condition') condition: number, @Args('feedOpen') feedOpen: number): Promise<Boolean> {
-
-
-    return await this.postService.addNewPost(context["req"].headers["authorization"],
+  async addPost(
+      @Context() context: object, @Args('uploadDate') uploadDate: string,
+      @Args('exercise') exercise: number, @Args('content') content: string,
+      @Args('condition') condition: number, @Args('feedOpen') feedOpen: number): Promise<Boolean> {
+        return await this.postService.addNewPost(context["req"].headers["authorization"],
         uploadDate, exercise, content, condition, feedOpen);
-  }
+      }
 
   // @Mutation('postMutation')
   // async userMutation(@Context() context: object): Promise<Boolean> {
