@@ -86,7 +86,7 @@ export class PostService {
     for (const node of data) {
       returnData.push({
         Post: node,
-        User: userService.getUserRepository().find(),
+        User: userService.getUserInformation(),
         // User: await getRepository(User)
         //   .createQueryBuilder('u').select(['u.userIndex', 'u.userName', 'u.naverID', 'u.kakaoID'])
         //   .where('u.userIndex = :userIndex', {userIndex: node.userIndex}).getOne(),
