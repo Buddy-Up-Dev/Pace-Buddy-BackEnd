@@ -13,6 +13,7 @@ export class LikeService {
         .createQueryBuilder('l').select('*')
         .where('l.postIndex = :postIndex', { postIndex: postIndex }).getCount();
     } catch (e) {
+
       throw new Error(e);
     }
   }
