@@ -63,6 +63,23 @@ export class PostService {
     }
   }
 
+  public async getMyPost(context: object, userService: any, likeService: any)
+    : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+    let userIndex: number = 1;
+    // @ts-ignore
+    try {
+      const allMyPost: Post[] = await getRepository(Post)
+        .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
+          'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
+        .where('p.feedOpen = 1')
+        .andWhere('p.userIndex = :userIndex', { userIndex: userIndex })
+        .getMany();
+      return await this.parseReturnData(allMyPost, userIndex, userService, likeService);
+    } catch (e) {
+      throw new Error("Error: " + e);
+    }
+  }
+
   private async parseReturnData(data: Post[], userIndex: number, userService: any, likeService: any):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     const returnData: object[] = [];
@@ -88,23 +105,6 @@ export class PostService {
     return data.sort((a, b) => {
       return parseFloat(b.Like) - parseFloat(a.Like);
     });
-  }
-
-  public async getMyPost(context: object, userService: any, likeService: any)
-    : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    let userIndex: number = 1;
-    // @ts-ignore
-    try {
-      const allMyPost: Post[] = await getRepository(Post)
-          .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
-            'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
-          .where('p.feedOpen = 1')
-          .andWhere('p.userIndex = :userIndex', { userIndex: userIndex })
-          .getMany();
-      return await this.parseReturnData(allMyPost, userIndex, userService, likeService);
-    } catch (e) {
-      throw new Error("Error: " + e);
-    }
   }
 
   // public async reporting(context: object): Promise<> {

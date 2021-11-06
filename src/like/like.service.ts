@@ -7,7 +7,6 @@ export class LikeService {
   constructor() {
 
   }
-
   async getLike(postIndex: number): Promise<number> {
     try {
       return await getRepository(Like)
