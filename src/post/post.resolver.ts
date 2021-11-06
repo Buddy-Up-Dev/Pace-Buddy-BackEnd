@@ -35,22 +35,20 @@ export class PostResolver {
     return await this.postService.getMyPost(context, this.userService, this.likeService);
   }
 
-  @Query("reporting")
-  async reporting(@Context() context: object): Promise<number> {
-    return await this.postService.reporting(context);
-  }
+  // @Query("reporting")
+  // async reporting(@Context() context: object): Promise<number> {
+  //   return await this.postService.reporting(context);
+  // }
 
   @Mutation('addPost')
   async addPost(
-      @Context() context: object, @Args('uploadDate') uploadDate: string,
-      @Args('exercise') exercise: number, @Args('content') content: string,
-      @Args('condition') condition: number, @Args('feedOpen') feedOpen: number): Promise<Boolean> {
-        return await this.postService.addNewPost(context["req"].headers["authorization"],
-        uploadDate, exercise, content, condition, feedOpen);
-      }
-
-  // @Mutation('postMutation')
-  // async userMutation(@Context() context: object): Promise<Boolean> {
-  //   return this.postService.getTrue(context);
-  // }
+      @Context() context: object,
+      @Args('uploadDate') uploadDate: string,
+      @Args('exercise') exercise: number,
+      @Args('content') content: string,
+      @Args('condition') condition: number,
+      @Args('feedOpen') feedOpen: number
+  ): Promise<Boolean> {
+    return await this.postService.addPost(context, uploadDate, exercise, content, condition, feedOpen);
+  }
 }

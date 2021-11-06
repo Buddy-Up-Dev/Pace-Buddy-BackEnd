@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { getRepository, Repository } from "typeorm";
+import { getConnection, getRepository, Repository } from "typeorm";
 
 import { Post } from "./post.entity";
 import { User } from "../user/user.entity";
@@ -107,6 +107,8 @@ export class PostService {
     });
   }
 
+  // TODO: JWT Decode 추후 추가 예정
+  // TODO: 여기서 Entity가 필요하다고 한거구나
   // public async reporting(context: object): Promise<> {
   //   let userIndex: number = 1;
   //   // @ts-ignore
@@ -117,6 +119,26 @@ export class PostService {
   //   }
   // }
 
+  // TODO : JWT Logic
+  async addPost(context: object, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
+    let userIndex: number = 1;
+    try {
+      await getConnection().createQueryBuilder()
+          .insert().into(Post)
+          .values({
+            userIndex: userIndex,
+            exercise: exercise,
+            content: content,
+            condition: condition,
+            uploadDate: uploadDate,
+            feedOpen: feedOpen
+          })
+          .execute();
+      return true;
+    } catch(e) {
+      throw new Error(e);
+    }
+  }
 
   async getLikeCount(userIndex: number): Promise<number[]> {
     const returnLike: number[] = [];
@@ -130,20 +152,4 @@ export class PostService {
     return returnLike;
   }
 
-  async reporting(context: object): Promise<number> {
-    let userIndex = -1;
-    // TODO: JWT Decode 추후 추가 예정
-    // TODO: 여기서 Entity가 필요하다고 한거구나
-
-    return 1;
-  }
-
-  async addNewPost (token: string, uploadData: string, exercise: number, content: string, condition: number,
-                        feedOpen: number): Promise<Boolean> {
-    let userIndex = -1;
-
-    // TODO: JWT Logic
-
-    return true;
-  }
 }
