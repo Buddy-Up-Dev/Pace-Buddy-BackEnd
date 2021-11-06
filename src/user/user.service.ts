@@ -9,12 +9,16 @@ import { InjectRepository } from "@nestjs/typeorm";
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>
+    @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {
     this.userRepository = userRepository;
   }
 
   public async getTrue(): Promise<Boolean> {
     return true;
+  }
+
+  public getUserRepository(): object {
+    return this.userRepository;
   }
 }

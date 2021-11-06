@@ -8,8 +8,6 @@ import { Like } from "../like/like.entity";
 import { PostDataDto } from "./DTO/post-data-dto";
 import { PostInformation } from "../graphql";
 
-import { UserService } from "../user/user.service";
-import { LikeService } from "../like/like.service";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
@@ -20,29 +18,25 @@ export class PostService {
     this.postRepository = postRepository
   }
 
-  public async testORM(): Promise<any> {
+  public async testORM(userService: any, likeService: any): Promise<any> {
     // const test = await this.userService.getUserRepository().find();
-    const test = await this.postRepository.find();
-    console.info(test);
+    const test: object = await this.postRepository.find();
+    console.info(await userService.getUserRepository().find());
     return test;
   }
 
   // TODO: Context 필요함 리턴 데이터를 스키마 타입에 맞게 Parse 해줘야 하는 문제 있음
-  public async getAllLatestPost(context: object, orderByFlag: number, userService, likeService)
+  public async getAllLatestPost(context: object, orderByFlag: number, userService: any, likeService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    // await this.userService.getTrue()
+    console.info(await userService.getUserRepository());
     let userIndex: number = 1;
 
     // TODO: JWT Logic
 
     try {
-      // const allLatestPost: Post[] = await getRepository(Post)
-      //   .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
-      //     'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
-      //   .where('p.feedOpen = 1').getMany();
-
-      const allLatestPost = await this.postRepository.find();
-      let returnData: { likeArray: number[]; PostData: PostInformation[] } = await this.parseReturnData(allLatestPost, userIndex);
+      const allLatestPost: Post[] = await this.postRepository.find();
+      let returnData: { likeArray: number[]; PostData: PostInformation[] } =
+        await this.parseReturnData(allLatestPost, userIndex, userService, likeService);
       if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
       return returnData;
     } catch (e) {
@@ -50,7 +44,8 @@ export class PostService {
     }
   }
 
-  public async getSpecificExercise(context: object, orderByFlag: number, exercise: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+  public async getSpecificExercise(context: object, orderByFlag: number, exercise: number, userService: any, likeService: any)
+    : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     let userIndex: number = 1;
     // @ts-ignore
     try {
@@ -60,7 +55,7 @@ export class PostService {
           .where('p.feedOpen = 1')
           .andWhere('p.exercise = :exercise', { exercise: exercise })
           .getMany();
-      let returnData: { likeArray: number[]; PostData: PostInformation[] } = await this.parseReturnData(specificPost, userIndex);
+      let returnData: { likeArray: number[]; PostData: PostInformation[] } = await this.parseReturnData(specificPost, userIndex, userService, likeService);
       if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
       return returnData;
     } catch(e) {
@@ -68,42 +63,19 @@ export class PostService {
     }
   }
 
-  public async getMyPost(context: object): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    let userIndex: number = 1;
-    // @ts-ignore
-    try {
-      const allMyPost: Post[] = await getRepository(Post)
-          .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
-            'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
-          .where('p.feedOpen = 1')
-          .andWhere('p.userIndex = :userIndex', { userIndex: userIndex })
-          .getMany();
-      return await this.parseReturnData(allMyPost, userIndex);
-    } catch (e) {
-    }
-  }
-
-  // public async reporting(context: object): Promise<> {
-  //   let userIndex: number = 1;
-  //   // @ts-ignore
-  //   try {
-  //     const reporting:
-  //   } catch(e) {
-  //     throw new Error(e);
-  //   }
-  // }
-
-  private async parseReturnData(data: Post[], userIndex: number): Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+  private async parseReturnData(data: Post[], userIndex: number, userService: any, likeService: any):
+    Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     const returnData: object[] = [];
     for (const node of data) {
       returnData.push({
         Post: node,
-        User: await getRepository(User)
-          .createQueryBuilder('u').select(['u.userIndex', 'u.userName', 'u.naverID', 'u.kakaoID'])
-          .where('u.userIndex = :userIndex', {userIndex: node.userIndex}).getOne(),
-        Like: await getRepository(Like)
-          .createQueryBuilder('l').select('*')
-          .where('l.postIndex = :postIndex', { postIndex: node.postIndex }).getCount()
+        User: userService.getUserRepository().find(),
+        // User: await getRepository(User)
+        //   .createQueryBuilder('u').select(['u.userIndex', 'u.userName', 'u.naverID', 'u.kakaoID'])
+        //   .where('u.userIndex = :userIndex', {userIndex: node.userIndex}).getOne(),
+        // Like: await getRepository(Like)
+        //   .createQueryBuilder('l').select('*')
+        //   .where('l.postIndex = :postIndex', { postIndex: node.postIndex }).getCount()
       })
       node.uploadDate = JSON.stringify(node.uploadDate).slice(6, 8) + "." + JSON.stringify(node.uploadDate).slice(9, 11);
     }
@@ -117,6 +89,34 @@ export class PostService {
       return parseFloat(b.Like) - parseFloat(a.Like);
     });
   }
+
+  public async getMyPost(context: object, userService: any, likeService: any)
+    : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
+    let userIndex: number = 1;
+    // @ts-ignore
+    try {
+      const allMyPost: Post[] = await getRepository(Post)
+          .createQueryBuilder('p').select(['p.postIndex', 'p.userIndex',
+            'p.exercise', 'p.content', 'p.condition', 'p.uploadDate', 'p.feedOpen'])
+          .where('p.feedOpen = 1')
+          .andWhere('p.userIndex = :userIndex', { userIndex: userIndex })
+          .getMany();
+      return await this.parseReturnData(allMyPost, userIndex, userService, likeService);
+    } catch (e) {
+      throw new Error("Error: " + e);
+    }
+  }
+
+  // public async reporting(context: object): Promise<> {
+  //   let userIndex: number = 1;
+  //   // @ts-ignore
+  //   try {
+  //     const reporting:
+  //   } catch(e) {
+  //     throw new Error(e);
+  //   }
+  // }
+
 
   async getLikeCount(userIndex: number): Promise<number[]> {
     const returnLike: number[] = [];

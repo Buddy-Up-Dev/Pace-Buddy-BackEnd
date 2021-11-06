@@ -14,7 +14,7 @@ export class PostResolver {
 
   @Query('testORM')
   async testOrm(): Promise<Post[]> {
-    return await this.postService.testORM();
+    return await this.postService.testORM(this.userService, this.likeService);
   }
 
   @Query('getAllLatestPost')
@@ -26,13 +26,13 @@ export class PostResolver {
   @Query('getSpecificExercise')
   async getSpecificExercise(@Context() context: object, @Args('flag') orderByFlag: number, @Args('exercise') exercise: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getSpecificExercise(context, orderByFlag, exercise);
+    return await this.postService.getSpecificExercise(context, orderByFlag, exercise, this.userService, this.likeService);
   }
 
   @Query("getMyPost")
-  async getMyPost(@Context() context: object):
+  async getMyPost(context: object):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getMyPost(context);
+    return await this.postService.getMyPost(context, this.userService, this.likeService);
   }
 
   @Query("reporting")
