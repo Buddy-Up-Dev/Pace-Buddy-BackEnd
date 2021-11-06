@@ -123,17 +123,14 @@ export class PostService {
   async addPost(context: object, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
     let userIndex: number = 1;
     try {
-      await getConnection().createQueryBuilder()
-          .insert().into(Post)
-          .values({
-            userIndex: userIndex,
-            exercise: exercise,
-            content: content,
-            condition: condition,
-            uploadDate: uploadDate,
-            feedOpen: feedOpen
-          })
-          .execute();
+      let newPost: Post = new Post();
+      newPost.userIndex = userIndex;
+      newPost.uploadDate = uploadDate;
+      newPost.exercise = exercise;
+      newPost.content = content;
+      newPost.condition = condition;
+      newPost.feedOpen = feedOpen;
+      await this.postRepository.save(newPost);
       return true;
     } catch(e) {
       throw new Error(e);
