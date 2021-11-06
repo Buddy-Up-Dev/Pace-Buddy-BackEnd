@@ -1,0 +1,25 @@
+type Post {
+    postIndex: Int!
+    userIndex: Int!
+    uploadDate: String!
+    exercise: Int!
+    content: String!
+    condition: Int!
+    feedOpen: Int
+}
+
+type PostData {
+    PostData: [PostInformation]!
+    likeArray: [Int!]
+}
+
+type PostInformation {
+    Post: Post!
+    User: User!
+    Like: Int!
+}
+
+type Exercise {
+    exerciseIndex: Int!
+    exerciseName: String!
+}
