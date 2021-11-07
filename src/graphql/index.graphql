@@ -23,10 +23,10 @@ type Mutation {
 #    kakaoLogin (
 #        accessToken: String!
 #    ): String!
-#    likePost (
-#        postIndex: Int!
-#        isDuplicate: Boolean
-#    ): Boolean!
+    likePost (
+        postIndex: Int!
+        isDelete: Boolean
+    ): Boolean!
     addPost (
         uploadDate: String!
         exercise: Int!

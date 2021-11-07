@@ -96,6 +96,22 @@ export class PostService {
     }
   }
 
+  // TODO : JWT Logic
+  async likePost(context: object, postIndex: number, isDelete: boolean, likeService: any): Promise<boolean> {
+    let userIndex: number = 1;
+    try {
+      if (isDelete) {
+        await likeService.deleteLike(postIndex, userIndex);
+        return true;
+      } else {
+        await likeService.addLike(postIndex, userIndex);
+        return true;
+      }
+    } catch(e) {
+      throw new Error(e);
+    }
+  }
+
   async getLikeCount(userIndex: number, likeService: any): Promise<number[]> {
     const likeArray: Like[] = await likeService.getLikeByUser(userIndex);
     return likeArray.map(node => node.postIndex);
