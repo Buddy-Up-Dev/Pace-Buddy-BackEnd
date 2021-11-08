@@ -82,14 +82,7 @@ export class PostService {
   async addPost(context: object, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
     let userIndex: number = 1;
     try {
-      let newPost: Post = new Post();
-      newPost.userIndex = userIndex;
-      newPost.uploadDate = uploadDate;
-      newPost.exercise = exercise;
-      newPost.content = content;
-      newPost.condition = condition;
-      newPost.feedOpen = feedOpen;
-      await this.postRepository.save(newPost);
+      await this.postRepository.save(new Post(userIndex, uploadDate, exercise, content, condition, feedOpen).getPostInfo());
       return true;
     } catch(e) {
       throw new Error(e);

@@ -20,14 +20,22 @@ export class LikeService {
     return this.likeRepository.find({select: ["postIndex"], where: {userIndex: userIndex}});
   }
 
-  async addLike(postIndex: number, userIndex: number) {
-    return await this.likeRepository.save(new Like(userIndex, postIndex).getLikeInfo());
+  async addLike(postIndex: number, userIndex: number): Promise<boolean> {
+    try {
+      await this.likeRepository.save(new Like(userIndex, postIndex).getLikeInfo());
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
-  async deleteLike(postIndex: number, userIndex: number) {
-    return await this.likeRepository.delete({
-      postIndex: postIndex,
-      userIndex: userIndex
-    });
+  async deleteLike(postIndex: number, userIndex: number): Promise<boolean> {
+    try {
+      await this.likeRepository.delete({ postIndex: postIndex, userIndex: userIndex });
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
+
   }
 }

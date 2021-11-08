@@ -16,7 +16,7 @@ export class Like {
   @Column()
   postIndex: number;
 
-  getLikeInfo(): object{
+  public getLikeInfo(): object{
     return {userIndex: this.userIndex, postIndex: this.postIndex};
   }
 }
