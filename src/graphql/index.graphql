@@ -10,8 +10,7 @@ type Query{
     getExercise: [Exercise]!
     reporting: Int!
 #    getMyDate: [String!]
-#    userNickname: String!
-    userQuery: Boolean
+    userNickname: String!
     postQuery(test: Int! test_: String!): Boolean
     testORM: [Post]
 }
@@ -23,10 +22,10 @@ type Mutation {
 #    kakaoLogin (
 #        accessToken: String!
 #    ): String!
-#    likePost (
-#        postIndex: Int!
-#        isDuplicate: Boolean
-#    ): Boolean!
+    likePost (
+        postIndex: Int!
+        isDelete: Boolean
+    ): Boolean!
     addPost (
         uploadDate: String!
         exercise: Int!

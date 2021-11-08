@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from "typeorm";
 
-import { Post } from "../post/post.entity";
 import { User } from "./user.entity";
 
 import { InjectRepository } from "@nestjs/typeorm";
@@ -9,16 +8,22 @@ import { InjectRepository } from "@nestjs/typeorm";
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>
+    @InjectRepository(User) private userRepository: Repository<User>
   ) {
     this.userRepository = userRepository;
   }
 
-  public async getTrue(): Promise<Boolean> {
-    return true;
+  public async getUser(userIndex: number): Promise<object> {
+    return this.userRepository.findOne({ userIndex: userIndex });
   }
 
-  public getUserRepository(): object {
-    return this.userRepository;
+  // TODO: JWT LOGIC
+  public async getUserNickname(context: object): Promise<string> {
+    const userIndex = 1;
+    const [data] = await this.userRepository.find({
+      select: ["userName"],
+      where: { userIndex: userIndex }
+    });
+    return data.userName;
   }
 }

@@ -12,11 +12,6 @@ export class PostResolver {
     private likeService: LikeService
   ) {}
 
-  @Query('testORM')
-  async testOrm(): Promise<Post[]> {
-    return await this.postService.testORM(this.userService, this.likeService);
-  }
-
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
@@ -35,20 +30,21 @@ export class PostResolver {
     return await this.postService.getMyPost(context, this.userService, this.likeService);
   }
 
-  // @Query("reporting")
-  // async reporting(@Context() context: object): Promise<number> {
-  //   return await this.postService.reporting(context);
-  // }
+  @Query("reporting")
+  async reporting(@Context() context: object): Promise<number> {
+    return await this.postService.reporting(context);
+  }
 
   @Mutation('addPost')
-  async addPost(
-      @Context() context: object,
-      @Args('uploadDate') uploadDate: string,
-      @Args('exercise') exercise: number,
-      @Args('content') content: string,
-      @Args('condition') condition: number,
-      @Args('feedOpen') feedOpen: number
+  async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string, @Args('exercise') exercise: number,
+      @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
   ): Promise<Boolean> {
     return await this.postService.addPost(context, uploadDate, exercise, content, condition, feedOpen);
+  }
+
+  @Mutation('likePost')
+  async likePost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('isDelete') isDelete: boolean
+  ): Promise<Boolean> {
+    return await this.postService.likePost(context, postIndex, isDelete, this.likeService);
   }
 }
