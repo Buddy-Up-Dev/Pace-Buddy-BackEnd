@@ -24,15 +24,20 @@ export class PostResolver {
     return await this.postService.getSpecificExercise(context, orderByFlag, exercise, this.userService, this.likeService);
   }
 
-  @Query("getMyPost")
+  @Query('getMyPost')
   async getMyPost(context: object):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     return await this.postService.getMyPost(context, this.userService, this.likeService);
   }
 
-  @Query("reporting")
+  @Query('reporting')
   async reporting(@Context() context: object): Promise<number> {
     return await this.postService.reporting(context);
+  }
+
+  @Query('getMyDate')
+  async getMyDate(@Context() context: object): Promise<string[]> {
+    return await this.postService.getMyDate(context);
   }
 
   @Mutation('addPost')
