@@ -20,7 +20,9 @@ export abstract class IQuery {
 
     abstract reporting(): number | Promise<number>;
 
-    abstract userQuery(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    abstract getMyDate(): Nullable<string[]> | Promise<Nullable<string[]>>;
+
+    abstract userNickname(): string | Promise<string>;
 
     abstract postQuery(test: number, test_: string): Nullable<boolean> | Promise<Nullable<boolean>>;
 

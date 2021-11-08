@@ -17,7 +17,14 @@ export class LikeService {
   }
 
   async getLikeByUser(userIndex: number): Promise<Like[]> {
-    return this.likeRepository.find({select: ["postIndex"], where: {userIndex: userIndex}});
+    try {
+      return this.likeRepository.find({
+        select: ["postIndex"],
+        where: { userIndex: userIndex }
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   async addLike(postIndex: number, userIndex: number): Promise<boolean> {

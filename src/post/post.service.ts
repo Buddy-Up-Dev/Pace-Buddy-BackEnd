@@ -111,8 +111,19 @@ export class PostService {
   }
 
   public async reporting(context: object): Promise<number> {
-    let userIndex: number = 1;
-    // @ts-ignore
+    const userIndex: number = 1;
     return 1;
+  }
+
+  public async getMyDate(context: object): Promise<string[]> {
+    const userIndex: number = 1;
+    try {
+      return (await this.postRepository.find({ select: ["uploadDate"],
+        where: { userIndex: userIndex }
+      })).map(node => node.uploadDate);
+
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 }
