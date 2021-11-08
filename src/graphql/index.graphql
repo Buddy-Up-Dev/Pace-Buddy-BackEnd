@@ -9,7 +9,7 @@ type Query{
     getMyPost: PostData!
     getExercise: [Exercise]!
     reporting: Int!
-#    getMyDate: [String!]
+    getMyDate: [String!]
     userNickname: String!
     postQuery(test: Int! test_: String!): Boolean
     testORM: [Post]
