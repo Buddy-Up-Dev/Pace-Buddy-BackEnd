@@ -132,13 +132,10 @@ export class PostService {
   public async modifyPost(context: object, postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
     const userIndex: number = 1;
     try {
-      const data = await this.postRepository.findOne({where: {postIndex: postIndex}});
-      data.uploadDate = uploadDate;
-      data.exercise = exercise;
-      data.content = content;
-      data.condition = condition;
-      data.feedOpen = feedOpen;
-      await this.postRepository.save(data);
+      await this.postRepository.save({
+        postIndex: postIndex, uploadDate: uploadDate, exercise: exercise,
+        content: content, condition: condition, feedOpen: feedOpen
+      });
       return true;
     } catch (e) {
       throw new Error(e);

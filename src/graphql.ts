@@ -34,6 +34,8 @@ export abstract class IMutation {
 
     abstract modifyPost(postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 
+    abstract deletePost(postIndex: number): boolean | Promise<boolean>;
+
     abstract likePost(postIndex: number, isDelete?: Nullable<boolean>): boolean | Promise<boolean>;
 }
 
