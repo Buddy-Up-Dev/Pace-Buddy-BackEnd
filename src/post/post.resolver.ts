@@ -59,8 +59,9 @@ export class PostResolver {
     return await this.postService.likePost(context, postIndex, isDelete, this.likeService);
   }
 
-  // @Mutation('deletePost')
-  // async deletePost(@Context() context: object, @Args('postIndex') postIndex: number): Promise<Boolean> {
-  //
-  // }
+  @Mutation('deletePost')
+  async deletePost(@Context() context: object, @Args('postIndex') postIndex: number
+  ): Promise<Boolean> {
+    return await this.postService.deletePost(context, postIndex);
+  }
 }

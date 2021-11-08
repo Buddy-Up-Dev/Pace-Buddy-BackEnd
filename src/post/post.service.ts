@@ -141,4 +141,15 @@ export class PostService {
       throw new Error(e);
     }
   }
+
+  // TODO : JWT Logic
+  public async deletePost(context: object, postIndex: number): Promise<boolean> {
+    const userIndex: number = 1;
+    try {
+      await this.postRepository.delete({postIndex: postIndex});
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
 }
