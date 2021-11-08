@@ -3,9 +3,9 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity({name: "Like", schema: "Like"})
 
 export class Like {
-  constructor(userIndex: number, postIndex: number) {
-    this.userIndex = userIndex;
-    this.postIndex = postIndex;
+  constructor(_userIndex: number, _postIndex: number) {
+    this.userIndex = _userIndex;
+    this.postIndex = _postIndex;
   }
   @PrimaryGeneratedColumn()
   likeIndex: number;

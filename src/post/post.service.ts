@@ -117,13 +117,9 @@ export class PostService {
     return likeArray.map(node => node.postIndex);
   }
 
-  // public async reporting(context: object): Promise<> {
-  //   let userIndex: number = 1;
-  //   // @ts-ignore
-  //   try {
-  //     const reporting:
-  //   } catch(e) {
-  //     throw new Error(e);
-  //   }
-  // }
+  public async reporting(context: object): Promise<number> {
+    let userIndex: number = 1;
+    // @ts-ignore
+    return 1;
+  }
 }

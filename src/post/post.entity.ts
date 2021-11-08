@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity('Post')
 export class Post {
+  constructor(userIndex: number, uploadData) {
+  }
   @PrimaryGeneratedColumn()
   postIndex: number;
 
