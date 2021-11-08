@@ -24,7 +24,7 @@ export class PostService {
       const allLatestPost: Post[] = await this.postRepository.find();
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
         await this.parseReturnData(allLatestPost, userIndex, userService, likeService);
-      if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
+      if (orderByFlag === 1) returnData.PostData = this.sortByPopularity(returnData.PostData);
       return returnData;
     } catch (e) {
       throw new Error(e);
@@ -38,7 +38,7 @@ export class PostService {
       const specificPost: Post[] = await this.postRepository.find({ where: {exercise: exercise, feedOpen: 1} });
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
         await this.parseReturnData(specificPost, userIndex, userService, likeService);
-      if (orderByFlag === 1) returnData = this.sortByPopularity(returnData);
+      if (orderByFlag === 1) returnData.PostData = this.sortByPopularity(returnData);
       return returnData;
     } catch(e) {
       throw new Error(e);
@@ -72,7 +72,7 @@ export class PostService {
     return getPostData.getPostData();
   }
 
-  private sortByPopularity(data): PostDataDto {
+  private sortByPopularity(data): PostDataDto['PostData'] {
     return data.sort((a, b) => {
       return parseFloat(b.Like) - parseFloat(a.Like);
     });
