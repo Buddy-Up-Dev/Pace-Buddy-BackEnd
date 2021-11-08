@@ -7,13 +7,8 @@ import { PostService } from "../post/post.service";
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-  @Query('userQuery')
-  async userQuery(): Promise<Boolean> {
-    return this.userService.getTrue();
-  }
-
-  @Mutation('userMutation')
-  async userMutation(): Promise<Boolean> {
-    return this.userService.getTrue();
+  @Query('userNickname')
+  async userNickname(context: object): Promise<string> {
+    return this.userService.getUserNickname(context);
   }
 }
