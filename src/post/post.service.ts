@@ -115,6 +115,7 @@ export class PostService {
     return 1;
   }
 
+  // TODO : JWT Logic
   public async getMyDate(context: object): Promise<string[]> {
     const userIndex: number = 1;
     try {
@@ -122,6 +123,23 @@ export class PostService {
         where: { userIndex: userIndex }
       })).map(node => node.uploadDate);
 
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  // TODO : JWT logic
+  public async modifyPost(context: object, postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
+    const userIndex: number = 1;
+    try {
+      const data = await this.postRepository.findOne({where: {postIndex: postIndex}});
+      data.uploadDate = uploadDate;
+      data.exercise = exercise;
+      data.content = content;
+      data.condition = condition;
+      data.feedOpen = feedOpen;
+      await this.postRepository.save(data);
+      return true;
     } catch (e) {
       throw new Error(e);
     }

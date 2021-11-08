@@ -11,7 +11,6 @@ type Query{
     reporting: Int!
     getMyDate: [String!]
     userNickname: String!
-    postQuery(test: Int! test_: String!): Boolean
     testORM: [Post]
 }
 
@@ -22,10 +21,6 @@ type Mutation {
 #    kakaoLogin (
 #        accessToken: String!
 #    ): String!
-    likePost (
-        postIndex: Int!
-        isDelete: Boolean
-    ): Boolean!
     addPost (
         uploadDate: String!
         exercise: Int!
@@ -33,6 +28,16 @@ type Mutation {
         condition: Int!
         feedOpen: Int!
     ): Boolean!
-    userMutation: Boolean
-    postMutation: Boolean
+    modifyPost (
+        postIndex: Int!
+        uploadDate: String!
+        exercise: Int!
+        content: String!
+        condition: Int!
+        feedOpen: Int!
+    ): Boolean!
+    likePost (
+        postIndex: Int!
+        isDelete: Boolean
+    ): Boolean!
 }
