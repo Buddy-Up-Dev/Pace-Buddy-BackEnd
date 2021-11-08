@@ -24,21 +24,19 @@ export abstract class IQuery {
 
     abstract userNickname(): string | Promise<string>;
 
-    abstract postQuery(test: number, test_: string): Nullable<boolean> | Promise<Nullable<boolean>>;
-
     abstract testORM(): Nullable<Nullable<Post>[]> | Promise<Nullable<Nullable<Post>[]>>;
 }
 
 export abstract class IMutation {
     __typename?: 'IMutation';
 
-    abstract likePost(postIndex: number, isDelete?: Nullable<boolean>): boolean | Promise<boolean>;
-
     abstract addPost(uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 
-    abstract userMutation(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    abstract modifyPost(postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 
-    abstract postMutation(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    abstract deletePost(postIndex: number): boolean | Promise<boolean>;
+
+    abstract likePost(postIndex: number, isDelete?: Nullable<boolean>): boolean | Promise<boolean>;
 }
 
 export class Post {
