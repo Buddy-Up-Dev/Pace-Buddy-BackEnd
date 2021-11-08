@@ -118,16 +118,10 @@ export class PostService {
   public async getMyDate(context: object): Promise<string[]> {
     const userIndex: number = 1;
     try {
-      const test: object = await this.postRepository.find({
-        select: ["uploadDate"],
+      return (await this.postRepository.find({ select: ["uploadDate"],
         where: { userIndex: userIndex }
-      });
+      })).map(node => node.uploadDate);
 
-      for (const e of Object.entries(test)) {
-        console.log('e >', e[1].uploadDate);
-      }
-
-      return ['1', '2'];
     } catch (e) {
       throw new Error(e);
     }
