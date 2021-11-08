@@ -10,8 +10,7 @@ type Query{
     getExercise: [Exercise]!
     reporting: Int!
 #    getMyDate: [String!]
-#    userNickname: String!
-    userQuery: Boolean
+    userNickname: String!
     postQuery(test: Int! test_: String!): Boolean
     testORM: [Post]
 }

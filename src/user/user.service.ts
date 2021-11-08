@@ -13,11 +13,17 @@ export class UserService {
     this.userRepository = userRepository;
   }
 
-  public async getTrue(): Promise<Boolean> {
-    return true;
-  }
-
   public async getUser(userIndex: number): Promise<object> {
     return this.userRepository.findOne({ userIndex: userIndex });
+  }
+
+  // TODO: JWT LOGIC
+  public async getUserNickname(context: object): Promise<string> {
+    const userIndex = 1;
+    const [data] = await this.userRepository.find({
+      select: ["userName"],
+      where: { userIndex: userIndex }
+    });
+    return data.userName;
   }
 }
