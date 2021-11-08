@@ -30,6 +30,8 @@ export abstract class IQuery {
 export abstract class IMutation {
     __typename?: 'IMutation';
 
+    abstract likePost(postIndex: number, isDelete?: Nullable<boolean>): boolean | Promise<boolean>;
+
     abstract addPost(uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 
     abstract userMutation(): Nullable<boolean> | Promise<Nullable<boolean>>;

@@ -21,4 +21,18 @@ export class LikeService {
   async getLikeByUser(userIndex: number): Promise<Like[]> {
     return this.likeRepository.find({select: ["postIndex"], where: {userIndex: userIndex}});
   }
+
+  async addLike(postIndex: number, userIndex: number) {
+    let newLike: Like = new Like();
+    newLike.userIndex = userIndex;
+    newLike.postIndex = postIndex;
+    return await this.likeRepository.save(newLike);
+  }
+
+  async deleteLike(postIndex: number, userIndex: number) {
+    return await this.likeRepository.delete({
+      postIndex: postIndex,
+      userIndex: userIndex
+    });
+  }
 }
