@@ -47,9 +47,20 @@ export class PostResolver {
     return await this.postService.addPost(context, uploadDate, exercise, content, condition, feedOpen);
   }
 
+  @Mutation('modifyPost')
+  async modifyPost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('uploadDate') uploadDate: string, @Args('exercise') exercise: number, @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
+  ): Promise<Boolean> {
+    return await this.postService.modifyPost(context, postIndex, uploadDate, exercise, content, condition, feedOpen);
+  }
+
   @Mutation('likePost')
   async likePost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('isDelete') isDelete: boolean
   ): Promise<Boolean> {
     return await this.postService.likePost(context, postIndex, isDelete, this.likeService);
   }
+
+  // @Mutation('deletePost')
+  // async deletePost(@Context() context: object, @Args('postIndex') postIndex: number): Promise<Boolean> {
+  //
+  // }
 }
