@@ -10,9 +10,7 @@ export class LikeService {
   }
   async getLikeByPost(postIndex: number): Promise<number> {
     try {
-      return await getRepository(Like)
-        .createQueryBuilder('l').select('*')
-        .where('l.postIndex = :postIndex', { postIndex: postIndex }).getCount();
+      return (await this.likeRepository.find({ where: { postIndex: postIndex } })).length;
     } catch (e) {
       throw new Error(e);
     }
@@ -23,10 +21,7 @@ export class LikeService {
   }
 
   async addLike(postIndex: number, userIndex: number) {
-    let newLike: Like = new Like();
-    newLike.userIndex = userIndex;
-    newLike.postIndex = postIndex;
-    return await this.likeRepository.save(newLike);
+    return await this.likeRepository.save(new Like(userIndex, postIndex).getLikeInfo());
   }
 
   async deleteLike(postIndex: number, userIndex: number) {
