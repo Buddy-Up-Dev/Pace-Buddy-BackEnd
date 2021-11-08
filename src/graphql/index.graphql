@@ -36,6 +36,9 @@ type Mutation {
         condition: Int!
         feedOpen: Int!
     ): Boolean!
+    deletePost (
+        postIndex: Int!
+    ): Boolean!
     likePost (
         postIndex: Int!
         isDelete: Boolean
