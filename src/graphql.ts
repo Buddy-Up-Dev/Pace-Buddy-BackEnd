@@ -25,10 +25,14 @@ export abstract class IQuery {
     abstract userNickname(): string | Promise<string>;
 
     abstract testORM(): Nullable<Nullable<Post>[]> | Promise<Nullable<Nullable<Post>[]>>;
+
+    abstract testToken(): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export abstract class IMutation {
     __typename?: 'IMutation';
+
+    abstract naverLogin(accessToken: string): string | Promise<string>;
 
     abstract addPost(uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 

@@ -1,23 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UserRepository } from "../../dist/user/user.repository";
+import fetch from "node-fetch";
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
     private jwtService: JwtService
   ) {
+
   }
 
   public async tokenTest(): Promise<string> {
-    const payload: string = '1';
-    const jwtToken = await this.jwtService.sign(payload);
+    const payload: object = {userIndex: 1};
+    const jwtToken = this.jwtService.sign(payload);
     console.info(jwtToken);
 
     return 'a';
+  }
+
+  public async naverLogin(accessToken: string): Promise<string> {
+    console.log('accessToken >', accessToken);
+    // Logic: userInfo 조회 => duplicate 확인
+    const response = await fetch('https://openapi.naver.com/v1/nid/me', {
+      method: 'GET',
+      headers: { 'Authorization' : `Bearer ${accessToken}` }
+    })
+    const result = await response.text();
+    console.log('result >', result);
+
+    return 'aa';
   }
 
 }

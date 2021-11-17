@@ -7,14 +7,15 @@ export class AuthResolver {
   }
 
   @Query('testToken')
-  async testToken(context: object): Promise<boolean> {
+  async testToken(): Promise<boolean> {
+    console.info(process.env);
     await this.authService.tokenTest();
     return true;
   }
 
   @Mutation('naverLogin')
   async naverLogin(context: object, @Args('accessToken') accessToken: string): Promise<string> {
-
+    await this.authService.naverLogin(accessToken);
     return 'a'
   }
 
