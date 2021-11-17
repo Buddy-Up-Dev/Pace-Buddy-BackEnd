@@ -4,9 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 export class User {
   constructor() {}
   @PrimaryGeneratedColumn() userIndex: number;
-
   @Column({length: 600}) userName: string;
-  @Column({length: 600}) naverID: string;
-  @Column({length: 600}) kakaoID: string;
-
+  @Column({length: 600, nullable: true}) naverID: string;
+  @Column({length: 600, nullable: true}) kakaoID: string;
 }
