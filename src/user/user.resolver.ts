@@ -11,4 +11,9 @@ export class UserResolver {
   async userNickname(context: object): Promise<string> {
     return this.userService.getUserNickname(context);
   }
+
+  @Mutation('testToken')
+  async testToken(id: number): Promise<string> {
+    return this.userService.
+  }
 }
