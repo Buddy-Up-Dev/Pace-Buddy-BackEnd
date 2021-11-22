@@ -29,19 +29,22 @@ export class UserService {
 
   public async checkNewUser(userID: string, loginType: string): Promise<object> {
     if (loginType === "naver") {
-      const [data] = await this.userRepository.find({
-        select: ["userIndex"],
-        where: { naverID: userID }
-      });
-
-      // 이미 가입한 유저
-      if (data !== undefined) {
-        return { status: "login", userIndex: data.userIndex };
-      }
-      // 새로 가입하는 유저
-      else {
-        const userIndex = await this.addNewUser(userID, loginType);
-        return { status: "join", userIndex: userIndex };
+      try {
+        const [data] = await this.userRepository.find({
+          select: ["userIndex"],
+          where: { naverID: userID }
+        });
+        // 이미 가입한 유저
+        if (data !== undefined) {
+          return { status: "login", userIndex: data.userIndex };
+        }
+        // 새로 가입하는 유저
+        else {
+          const userIndex = await this.addNewUser(userID, loginType);
+          return { status: "join", userIndex: userIndex };
+        }
+      } catch(e) {
+        throw new Error(e);
       }
     }
   }
@@ -61,7 +64,6 @@ export class UserService {
     return 1;
   }
 
-  // TODO : User DB 내 유저 수 확인 후 기본 닉네임 생성
   public async makeDefaultName(): Promise<string> {
     const buddy = '버디';
     let alpha = 65;

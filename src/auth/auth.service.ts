@@ -25,13 +25,15 @@ export class AuthService {
     const result = await response.text();
 
     // 회원가입 및 로그인
-    if (response.status === 200) {
-      const userInfo: object = await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
-      return await this.createToken(userInfo)
-
-    } else {
-      return 'naver openAPI error:' + response.statusText;
-
+    try {
+      if (response.status === 200) {
+        const userInfo: object = await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
+        return await this.createToken(userInfo);
+      } else {
+        return 'naver openAPI error:' + response.statusText;
+      }
+    } catch(e) {
+      throw new Error(e);
     }
   }
 
