@@ -26,4 +26,57 @@ export class UserService {
     });
     return data.userName;
   }
+
+  public async checkNewUser(userID: string, loginType: string): Promise<object> {
+    if (loginType === "naver") {
+      try {
+        const [data] = await this.userRepository.find({
+          select: ["userIndex"],
+          where: { naverID: userID }
+        });
+        // 이미 가입한 유저
+        if (data !== undefined) {
+          return { status: "login", userIndex: data.userIndex };
+        }
+        // 새로 가입하는 유저
+        else {
+          const userIndex = await this.addNewUser(userID, loginType);
+          return { status: "join", userIndex: userIndex };
+        }
+      } catch(e) {
+        throw new Error(e);
+      }
+    }
+  }
+
+  public async addNewUser(userID, loginType): Promise<number> {
+    try {
+      if (loginType === "naver") {
+        const newName = this.makeDefaultName();
+        await this.userRepository.save({
+          userName: await this.makeDefaultName(),
+          naverID: userID
+        });
+      }
+    } catch(e) {
+      throw new Error(e);
+    }
+    return 1;
+  }
+
+  public async makeDefaultName(): Promise<string> {
+    const buddy = '버디';
+    let alpha = 65;
+    let nick;
+    const newUserIdx = await this.userRepository.count() + 1;
+
+    if (newUserIdx < 10) {
+      nick = String.fromCharCode(alpha).concat('00', String(newUserIdx));
+    } else if (newUserIdx < 100) {
+      nick = String.fromCharCode(alpha).concat('0', String(newUserIdx));
+    } else {
+      nick = String.fromCharCode(alpha).concat(String(newUserIdx));
+    }
+    return buddy.concat(nick);
+  }
 }

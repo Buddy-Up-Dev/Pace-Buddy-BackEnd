@@ -3,19 +3,21 @@ import { PostService } from "./post.service";
 import { Post, PostInformation } from "../graphql";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service";
+import { AuthService } from "../auth/auth.service";
 
 @Resolver()
 export class PostResolver {
   constructor(
     private postService: PostService,
     private userService: UserService,
-    private likeService: LikeService
+    private likeService: LikeService,
+    private authService: AuthService
   ) {}
 
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService);
+    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService, this.authService);
   }
 
   @Query('getSpecificExercise')
