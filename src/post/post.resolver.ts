@@ -11,13 +11,12 @@ export class PostResolver {
     private postService: PostService,
     private userService: UserService,
     private likeService: LikeService,
-    private authService: AuthService
   ) {}
 
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService, this.authService);
+    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService);
   }
 
   @Query('getSpecificExercise')
