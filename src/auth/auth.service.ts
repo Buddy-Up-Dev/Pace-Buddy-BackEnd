@@ -9,7 +9,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  public async tokenTest(): Promise<string> {
+  public async tokenTest(context: object): Promise<string> {
     const payload: object = {userIndex: 1};
     const jwtToken = this.jwtService.sign(payload);
     console.info(jwtToken);

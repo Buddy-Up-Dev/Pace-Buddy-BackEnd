@@ -12,7 +12,7 @@ export class AuthResolver {
   @Query('testToken')
   async testToken(): Promise<boolean> {
     console.info(process.env);
-    await this.authService.tokenTest();
+    // await this.authService.tokenTest();
     return true;
   }
 
