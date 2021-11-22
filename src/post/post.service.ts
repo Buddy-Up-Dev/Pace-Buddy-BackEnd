@@ -16,7 +16,7 @@ export class PostService {
     this.postRepository = postRepository
   }
 
-  public async getAllLatestPost(context: object, orderByFlag: number, userService: any, likeService: any, authService: any)
+  public async getAllLatestPost(context: object, orderByFlag: number, userService: any, likeService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
     let userIndex: number = 1;
     // TODO: JWT Logic
