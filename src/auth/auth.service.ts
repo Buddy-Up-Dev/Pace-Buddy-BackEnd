@@ -15,7 +15,8 @@ export class AuthService {
     const payload: object = {userIndex: 1};
     const jwtToken = this.jwtService.sign(payload);
     console.info(jwtToken);
-
+    const decode = this.jwtService.decode(jwtToken);
+    console.info(decode);
     return 'a';
   }
 
@@ -29,12 +30,26 @@ export class AuthService {
 
     // 회원가입 및 로그인
     if (response.status === 200) {
-      return await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
-    } else {
-      console.log('naver openAPI error:', response.statusText);
-    }
+      const userInfo: object = await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
+      return await this.createToken(userInfo)
 
-    return 'aa';
+    } else {
+      return 'naver openAPI error:' + response.statusText;
+
+    }
+  }
+
+  public async createToken(userInfo: any): Promise<string> {
+    console.info(userInfo.userIndex);
+    const jwtToken = this.jwtService.sign({userIndex: userInfo.userIndex});
+    console.info(jwtToken);
+    return jwtToken;
+  }
+
+  public async decodeToken(token): Promise<number> {
+
+    return 1;
+
   }
 
 }

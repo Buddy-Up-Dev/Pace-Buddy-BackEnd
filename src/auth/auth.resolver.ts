@@ -18,9 +18,7 @@ export class AuthResolver {
 
   @Mutation('naverLogin')
   async naverLogin(context: object, @Args('accessToken') accessToken: string): Promise<string> {
-    const data = await this.authService.naverLogin(accessToken, this.userService);
-    console.log(data);
-    return 'naverLogin API 구현 중'
+    return await this.authService.naverLogin(accessToken, this.userService);
   }
 
 }
