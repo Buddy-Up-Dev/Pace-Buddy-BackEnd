@@ -1,10 +1,13 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
+import { UserService } from "../user/user.service";
 
 @Resolver()
 export class AuthResolver {
-  constructor(private authService: AuthService) {
-  }
+  constructor(
+      private authService: AuthService,
+      private userService: UserService
+  ) {}
 
   @Query('testToken')
   async testToken(): Promise<boolean> {
@@ -15,8 +18,9 @@ export class AuthResolver {
 
   @Mutation('naverLogin')
   async naverLogin(context: object, @Args('accessToken') accessToken: string): Promise<string> {
-    await this.authService.naverLogin(accessToken);
-    return 'a'
+    const data = await this.authService.naverLogin(accessToken, this.userService);
+    console.log(data);
+    return 'naverLogin API 구현 중'
   }
 
 }
