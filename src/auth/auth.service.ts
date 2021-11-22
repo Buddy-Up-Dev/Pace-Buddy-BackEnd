@@ -1,7 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-
-import { User } from "../user/user.entity";
 
 import fetch from "node-fetch";
 
@@ -15,8 +13,6 @@ export class AuthService {
     const payload: object = {userIndex: 1};
     const jwtToken = this.jwtService.sign(payload);
     console.info(jwtToken);
-    const decode = this.jwtService.decode(jwtToken);
-    console.info(decode);
     return 'a';
   }
 
@@ -41,15 +37,11 @@ export class AuthService {
 
   public async createToken(userInfo: any): Promise<string> {
     console.info(userInfo.userIndex);
-    const jwtToken = this.jwtService.sign({userIndex: userInfo.userIndex});
-    console.info(jwtToken);
-    return jwtToken;
+    return this.jwtService.sign({userIndex: userInfo.userIndex});
   }
 
-  public async decodeToken(token): Promise<number> {
-
-    return 1;
-
+  public async decodeToken(token): Promise<{ [p: string]: any } | string> {
+    return this.jwtService.decode(token);
   }
 
 }
