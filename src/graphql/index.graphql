@@ -12,12 +12,13 @@ type Query{
     getMyDate: [String!]
     userNickname: String!
     testORM: [Post]
+    testToken: Boolean
 }
 
 type Mutation {
-#    naverLogin (
-#        accessToken: String!
-#    ): String!
+    naverLogin (
+        accessToken: String!
+    ): String!
 #    kakaoLogin (
 #        accessToken: String!
 #    ): String!
