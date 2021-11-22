@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: node:12-alpine
+    image: node:pace-buddy
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,4 +10,3 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
-    command: sh -c "npm run start:dev"
