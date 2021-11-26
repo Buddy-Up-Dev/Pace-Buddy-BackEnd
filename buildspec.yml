@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
@@ -16,8 +15,9 @@ phases:
     commands:
       - "echo post_Build Starting"
       - "docker-compose -f docker-compose.yml push"
-  artifacts:
-    files:
-      - "appspec.yml"
-      - "scripts/*"
-      - "docker-compose.yml"
+
+artifacts:
+  files:
+    - "appspec.yml"
+    - "scripts/*"
+    - "docker-compose.yml"
