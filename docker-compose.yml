@@ -1,9 +1,10 @@
 version: '3'
 services:
   app:
-    image: node:pace-buddy
+    image: thd930308/node:pace-buddy
     build:
       context: .
+      container_name: "app"
       dockerfile: Dockerfile
     ports:
       - 3000:3000
