@@ -12,7 +12,7 @@ export class AuthService {
   public async tokenTest(context: object): Promise<string> {
     const payload: object = {userIndex: 1};
     const jwtToken = this.jwtService.sign(payload);
-    console.info(jwtToken);
+    console.info('jwt >', jwtToken);
     return 'a';
   }
 
@@ -35,6 +35,32 @@ export class AuthService {
     } catch(e) {
       throw new Error(e);
     }
+  }
+
+  public async kakaoLogin(accessToken: string, userService: any): Promise<string> {
+    // userInfo(id) 조회
+    const response = await fetch('https://kapi.kakao.com/v2/user/me', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    })
+
+    const result = await response.text();
+
+    console.log('response >', response);
+    console.log('result >', result);
+
+    // 회원가입 및 로그인
+    // try {
+    //   if (response.status === 200) {
+    //     const userInfo: object = await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
+    //     return await this.createToken(userInfo);
+    //   } else {
+    //     return 'naver openAPI error:' + response.statusText;
+    //   }
+    // } catch(e) {
+    //   throw new Error(e);
+    // }
+    return 'YES'
   }
 
   public async createToken(userInfo: any): Promise<string> {

@@ -11,7 +11,7 @@ export class AuthResolver {
 
   @Query('testToken')
   async testToken(): Promise<boolean> {
-    console.info(process.env);
+    console.info('process.env >', process.env);
     // await this.authService.tokenTest();
     return true;
   }
@@ -21,4 +21,9 @@ export class AuthResolver {
     return await this.authService.naverLogin(accessToken, this.userService);
   }
 
+  @Mutation('kakaoLogin')
+  async kakaoLogin(context: object, @Args('accessToken') accessToken: string): Promise<string> {
+    await this.authService.kakaoLogin(accessToken, this.userService);
+    return 'YES'
+  }
 }
