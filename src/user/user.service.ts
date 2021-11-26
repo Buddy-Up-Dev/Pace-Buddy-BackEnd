@@ -18,7 +18,7 @@ export class UserService {
   }
 
   // TODO: JWT LOGIC
-  public async getUserNickname(context: object): Promise<string> {
+  public async getUserNickname(context: any, authService: any): Promise<string> {
     const userIndex = 1;
     const [data] = await this.userRepository.find({
       select: ["userName"],
@@ -78,5 +78,23 @@ export class UserService {
       nick = String.fromCharCode(alpha).concat(String(newUserIdx));
     }
     return buddy.concat(nick);
+  }
+
+  // TODO : JWT LOGIC
+  public async deleteUser(context: object): Promise<string> {
+    const userIndex = 6;
+
+    try {
+      // User 테이블에서 삭제
+      await this.userRepository.delete({ userIndex: userIndex });
+
+      // Post 테이블에서 삭제
+
+      // Like 테이블에서 삭제 ()
+    } catch(e) {
+      throw new Error(e);
+    }
+
+    return 'ok';
   }
 }

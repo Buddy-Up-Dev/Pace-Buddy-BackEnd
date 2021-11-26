@@ -34,6 +34,8 @@ export abstract class IMutation {
 
     abstract naverLogin(accessToken: string): string | Promise<string>;
 
+    abstract kakaoLogin(accessToken: string): string | Promise<string>;
+
     abstract addPost(uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
 
     abstract modifyPost(postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): boolean | Promise<boolean>;
