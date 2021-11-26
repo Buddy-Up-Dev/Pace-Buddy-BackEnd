@@ -5,15 +5,15 @@ phases:
       nodejs: 12
   pre_build:
     commands:
-      - "echo Build Phase >> pre_build phase..."
+      - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_PRE_BUILD"
       - 'docker login --username=$DOCKER_ID --password=$DOCKER_PW'
   build:
     commands:
-      - "echo Build Starting"
+      - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_MAIN_BUILD"
       - "docker-compose -f docker-compose.yml build"
   post_build:
     commands:
-      - "echo post_Build Starting"
+      - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_POST_BUILD"
       - "docker-compose -f docker-compose.yml push"
 
 artifacts:
