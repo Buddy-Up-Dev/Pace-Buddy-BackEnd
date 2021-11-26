@@ -6,7 +6,7 @@ phases:
   pre_build:
     commands:
       - "echo Build Phase >> pre_build phase..."
-      - npm install
+      - 'docker login --username=$DOCKER_ID --password=$DOCKER_PW'
   build:
     commands:
       - "echo Build Starting"
