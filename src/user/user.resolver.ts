@@ -13,8 +13,7 @@ export class UserResolver {
   ) {}
 
   @Query('userNickname')
-  async userNickname(@Context('req') context: any): Promise<string> {
-    console.log('context >', context);
+  async userNickname(@Context() context: any): Promise<string> {
     return this.userService.getUserNickname(context, this.authService);
   }
 
