@@ -1,12 +1,17 @@
 version: '3'
 services:
   app:
-    image: node:pace-buddy
+    restart: always
+    image: thd930308/node:pace-buddy
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: "app"
     ports:
       - 3000:3000
     working_dir: /app
     volumes:
-      - ./:/app
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:

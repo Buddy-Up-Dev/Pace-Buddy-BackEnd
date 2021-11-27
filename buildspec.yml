@@ -1,14 +1,24 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
       nodejs: 12
-  pre-build:
-    commentd:
-      - echo Build Phase >> pre_build phase...
-      - npm install
+  pre_build:
+    commands:
+      - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_PRE_BUILD"
+      - 'docker login --username=$DOCKER_ID --password=$DOCKER_PW'
   build:
     commands:
-      - echo Build Starting
-      - npm run start
+      - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_MAIN_BUILD"
+      - "docker-compose -f docker-compose.yml build"
+  post_build:
+    commands:
+      - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_POST_BUILD"
+      - "docker-compose -f docker-compose.yml push"
+
+artifacts:
+  files:
+    - "appspec.yml"
+    - "scripts/*"
+    - "docker-compose.yml"
+    - "Dockerfile"

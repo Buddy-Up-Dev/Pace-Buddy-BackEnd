@@ -20,6 +20,8 @@ export class UserService {
   // TODO: JWT LOGIC
   public async getUserNickname(context: any, authService: any): Promise<string> {
     const userIndex = 1;
+    console.log(context.req.headers.authorization);
+    console.log(context.user);
     const [data] = await this.userRepository.find({
       select: ["userName"],
       where: { userIndex: userIndex }
