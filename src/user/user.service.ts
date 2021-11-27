@@ -49,21 +49,48 @@ export class UserService {
         throw new Error(e);
       }
     }
+    else if (loginType === "kakao") {
+      try {
+        const [data] = await this.userRepository.find({
+          select: ["userIndex"],
+          where: { kakaoID: userID }
+        });
+        // 이미 가입한 유저
+        if (data !== undefined) {
+          return { status: "login", userIndex: data.userIndex };
+        }
+        // 새로 가입하는 유저
+        else {
+          const userIndex = await this.addNewUser(userID, loginType);
+          return { status: "join", userIndex: userIndex };
+        }
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
   }
 
   public async addNewUser(userID, loginType): Promise<number> {
     try {
       if (loginType === "naver") {
         const newName = this.makeDefaultName();
-        await this.userRepository.save({
+        const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           naverID: userID
         });
+        return newUser.userIndex;
+      }
+      else if (loginType === "kakao") {
+        const newName = this.makeDefaultName();
+        const newUser = await this.userRepository.save({
+          userName: await this.makeDefaultName(),
+          kakaoID: userID
+        })
+        return newUser.userIndex;
       }
     } catch(e) {
       throw new Error(e);
     }
-    return 1;
   }
 
   public async makeDefaultName(): Promise<string> {
