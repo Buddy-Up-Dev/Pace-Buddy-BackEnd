@@ -18,9 +18,8 @@ phases:
 
 artifacts:
   files:
-    - "**/*"
-#    - "appspec.yml"
-#    - "scripts/*"
-#    - "docker-compose.yml"
-#    - "Dockerfile"
-#    - "dist/*"
+    - "appspec.yml"
+    - "scripts/*"
+    - "package.json"
+    - "docker-compose.yml"
+    - "Dockerfile"

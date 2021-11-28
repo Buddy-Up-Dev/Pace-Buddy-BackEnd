@@ -2,7 +2,7 @@
 if [ "$DEPLOYMENT_GROUP_NAME" == "dev" ]
 then
   docker-compose -f /deploy/docker-compose.yml rm -v
-  docker-compose -f /deploy/docker-compose.yml up --detach --renew-anon-volumes
+  docker-compose -f /deploy/docker-compose.yml up
 elif [ "$DEPLOYMENT_GROUP_NAME" == "stage" ]
 then
   docker-compose -f /deploy/docker-compose.yml rm -v
