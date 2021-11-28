@@ -1,6 +1,7 @@
 
 if [ "$DEPLOYMENT_GROUP_NAME" == "dev" ]
 then
+  command 'sudo Dev Deployment System Start'
   docker-compose -f /deploy/docker-compose.yml rm -v
   docker-compose -f /deploy/docker-compose.yml up
 elif [ "$DEPLOYMENT_GROUP_NAME" == "stage" ]
