@@ -15,6 +15,7 @@ phases:
     commands:
       - "echo [PACE_BUDDY_PIPELINE_SYSTEM]:: START_POST_BUILD"
       - "docker-compose -f docker-compose.yml push"
+      -
 
 artifacts:
   files:
