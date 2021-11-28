@@ -23,3 +23,5 @@ artifacts:
     - "package.json"
     - "docker-compose.yml"
     - "Dockerfile"
+    - "tsconfig.build.json"
+    - "tsconfig.json"
