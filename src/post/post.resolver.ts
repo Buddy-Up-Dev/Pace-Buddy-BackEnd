@@ -11,58 +11,59 @@ export class PostResolver {
     private postService: PostService,
     private userService: UserService,
     private likeService: LikeService,
+    private authService: AuthService
   ) {}
 
   @Query('getAllLatestPost')
   async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService);
+    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService, this.authService);
   }
 
   @Query('getSpecificExercise')
   async getSpecificExercise(@Context() context: object, @Args('flag') orderByFlag: number, @Args('exercise') exercise: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getSpecificExercise(context, orderByFlag, exercise, this.userService, this.likeService);
+    return await this.postService.getSpecificExercise(context, orderByFlag, exercise, this.userService, this.likeService, this.authService);
   }
 
   @Query('getMyPost')
-  async getMyPost(context: object):
+  async getMyPost(@Context() context: object):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getMyPost(context, this.userService, this.likeService);
+    return await this.postService.getMyPost(context, this.userService, this.likeService, this.authService);
   }
 
   @Query('reporting')
   async reporting(@Context() context: object): Promise<number> {
-    return await this.postService.reporting(context);
+    return await this.postService.reporting(context, this.authService);
   }
 
   @Query('getMyDate')
   async getMyDate(@Context() context: object): Promise<string[]> {
-    return await this.postService.getMyDate(context);
+    return await this.postService.getMyDate(context, this.authService);
   }
 
   @Mutation('addPost')
   async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string, @Args('exercise') exercise: number,
       @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
   ): Promise<Boolean> {
-    return await this.postService.addPost(context, uploadDate, exercise, content, condition, feedOpen);
+    return await this.postService.addPost(context, uploadDate, exercise, content, condition, feedOpen, this.authService);
   }
 
   @Mutation('modifyPost')
   async modifyPost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('uploadDate') uploadDate: string, @Args('exercise') exercise: number, @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
   ): Promise<Boolean> {
-    return await this.postService.modifyPost(context, postIndex, uploadDate, exercise, content, condition, feedOpen);
+    return await this.postService.modifyPost(context, postIndex, uploadDate, exercise, content, condition, feedOpen, this.authService);
   }
 
   @Mutation('likePost')
   async likePost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('isDelete') isDelete: boolean
   ): Promise<Boolean> {
-    return await this.postService.likePost(context, postIndex, isDelete, this.likeService);
+    return await this.postService.likePost(context, postIndex, isDelete, this.likeService, this.authService);
   }
 
   @Mutation('deletePost')
   async deletePost(@Context() context: object, @Args('postIndex') postIndex: number
   ): Promise<Boolean> {
-    return await this.postService.deletePost(context, postIndex);
+    return await this.postService.deletePost(context, postIndex, this.authService);
   }
 }

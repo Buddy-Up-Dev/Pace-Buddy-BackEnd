@@ -3,7 +3,6 @@ import { UserService } from './user.service';
 import { User } from './user.entity';
 import { PostService } from "../post/post.service";
 import { AuthService } from "../auth/auth.service";
-import { Headers } from "@nestjs/common";
 
 @Resolver()
 export class UserResolver {
