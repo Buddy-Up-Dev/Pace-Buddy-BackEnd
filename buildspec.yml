@@ -22,3 +22,4 @@ artifacts:
     - "scripts/*"
     - "docker-compose.yml"
     - "Dockerfile"
+    - "dist/*"
