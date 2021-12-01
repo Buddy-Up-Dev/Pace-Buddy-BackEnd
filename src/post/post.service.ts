@@ -172,7 +172,16 @@ export class PostService {
     const decode = await authService.decodeToken(token);
     const userIndex = decode['userIndex'];
     try {
-      await this.postRepository.delete({postIndex: postIndex});
+      await this.postRepository.delete({ postIndex: postIndex });
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  public async deleteUserPost(userIndex: number): Promise<boolean> {
+    try {
+      await this.postRepository.delete({ userIndex: userIndex });
       return true;
     } catch (e) {
       throw new Error(e);

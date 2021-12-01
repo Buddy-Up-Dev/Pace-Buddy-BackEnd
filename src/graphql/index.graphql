@@ -44,4 +44,5 @@ type Mutation {
         postIndex: Int!
         isDelete: Boolean
     ): Boolean!
+    deleteUser: Boolean
 }

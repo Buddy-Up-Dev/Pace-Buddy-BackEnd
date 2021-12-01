@@ -43,6 +43,8 @@ export abstract class IMutation {
     abstract deletePost(postIndex: number): boolean | Promise<boolean>;
 
     abstract likePost(postIndex: number, isDelete?: Nullable<boolean>): boolean | Promise<boolean>;
+
+    abstract deleteUser(): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export class Post {
