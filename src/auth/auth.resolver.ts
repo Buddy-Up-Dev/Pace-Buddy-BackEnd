@@ -9,13 +9,6 @@ export class AuthResolver {
       private userService: UserService
   ) {}
 
-  @Query('testToken')
-  async testToken(): Promise<boolean> {
-    console.info('process.env >', process.env);
-    // await this.authService.tokenTest();
-    return true;
-  }
-
   @Mutation('naverLogin')
   async naverLogin(context: object, @Args('accessToken') accessToken: string): Promise<string> {
     return await this.authService.naverLogin(accessToken, this.userService);
