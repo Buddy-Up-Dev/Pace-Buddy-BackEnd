@@ -7,9 +7,9 @@ export class ExerciseResolver {
   constructor(private exerciseService: ExerciseService) {}
 
   @Query('getExercise')
-  async getExercise(@Context() context: object):
+  async getExercise():
     Promise<Exercise[]> {
-    return await this.exerciseService.getExercise(context);
+    return await this.exerciseService.getExercise();
   }
 
 }

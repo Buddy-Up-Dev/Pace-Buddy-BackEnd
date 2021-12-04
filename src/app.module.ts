@@ -16,6 +16,7 @@ import { Like } from "./like/like.entity";
 import { Exercise } from "./exercise/exercise.entity";
 import { ExerciseModule } from "./exercise/exercise.module";
 import { AuthModule } from "./auth/auth.module";
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { AuthModule } from "./auth/auth.module";
       database: process.env.DATABASE,
       entities: [User, Post, Like, Exercise]
     }),
-    UserModule, PostModule, LikeModule, ExerciseModule, AuthModule
+    UserModule, PostModule, LikeModule, ExerciseModule, AuthModule, ReportModule
   ],
   controllers: [AppController],
   providers: [AppService]
