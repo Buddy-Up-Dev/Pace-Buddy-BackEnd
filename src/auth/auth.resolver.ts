@@ -16,7 +16,6 @@ export class AuthResolver {
 
   @Mutation('kakaoLogin')
   async kakaoLogin(context: object, @Args('accessToken') accessToken: string): Promise<string> {
-    await this.authService.kakaoLogin(accessToken, this.userService);
-    return 'YES'
+    return await this.authService.kakaoLogin(accessToken, this.userService);
   }
 }

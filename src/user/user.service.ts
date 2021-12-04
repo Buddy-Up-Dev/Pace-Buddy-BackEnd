@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from "typeorm";
 
 import { User } from "./user.entity";
+import { Post } from "../post/post.entity";
 
 import { InjectRepository } from "@nestjs/typeorm";
 
@@ -17,11 +18,12 @@ export class UserService {
     return this.userRepository.findOne({ userIndex: userIndex });
   }
 
-  // TODO: JWT LOGIC
   public async getUserNickname(context: any, authService: any): Promise<string> {
-    const userIndex = 1;
-    console.log(context.req.headers.authorization);
-    console.log(context.user);
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
+
     const [data] = await this.userRepository.find({
       select: ["userName"],
       where: { userIndex: userIndex }
@@ -49,21 +51,48 @@ export class UserService {
         throw new Error(e);
       }
     }
+    else if (loginType === "kakao") {
+      try {
+        const [data] = await this.userRepository.find({
+          select: ["userIndex"],
+          where: { kakaoID: userID }
+        });
+        // 이미 가입한 유저
+        if (data !== undefined) {
+          return { status: "login", userIndex: data.userIndex };
+        }
+        // 새로 가입하는 유저
+        else {
+          const userIndex = await this.addNewUser(userID, loginType);
+          return { status: "join", userIndex: userIndex };
+        }
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
   }
 
   public async addNewUser(userID, loginType): Promise<number> {
     try {
       if (loginType === "naver") {
         const newName = this.makeDefaultName();
-        await this.userRepository.save({
+        const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           naverID: userID
         });
+        return newUser.userIndex;
+      }
+      else if (loginType === "kakao") {
+        const newName = this.makeDefaultName();
+        const newUser = await this.userRepository.save({
+          userName: await this.makeDefaultName(),
+          kakaoID: userID
+        })
+        return newUser.userIndex;
       }
     } catch(e) {
       throw new Error(e);
     }
-    return 1;
   }
 
   public async makeDefaultName(): Promise<string> {
@@ -83,20 +112,24 @@ export class UserService {
   }
 
   // TODO : JWT LOGIC
-  public async deleteUser(context: object): Promise<string> {
-    const userIndex = 6;
+  public async deleteUser(context: any, postService: any, likeService: any, authService: any): Promise<boolean> {
+    // const req = context.req.headers.authorization;
+    // const token = req.substr(7, req.length - 7);
+    // const decode = await authService.decodeToken(token);
+    // const userIndex = decode['userIndex'];
+    const userIndex = 18;
 
     try {
       // User 테이블에서 삭제
       await this.userRepository.delete({ userIndex: userIndex });
+      // Post 테이블에서 해당 User 글 삭제
+      await postService.deleteUserPost(userIndex);
+      // Like 테이블에서 해당 User 좋아요 삭제 ()
+      await likeService.deleteUserLike(userIndex);
 
-      // Post 테이블에서 삭제
-
-      // Like 테이블에서 삭제 ()
-    } catch(e) {
+      return true;
+    } catch (e) {
       throw new Error(e);
     }
-
-    return 'ok';
   }
 }

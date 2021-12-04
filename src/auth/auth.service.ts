@@ -30,7 +30,7 @@ export class AuthService {
         const userInfo: object = await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
         return await this.createToken(userInfo);
       } else {
-        return 'naver openAPI error:' + response.statusText;
+        return 'naver login openAPI error: ' + response.statusText;
       }
     } catch(e) {
       throw new Error(e);
@@ -43,28 +43,22 @@ export class AuthService {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${accessToken}` }
     })
-
     const result = await response.text();
 
-    console.log('response >', response);
-    console.log('result >', result);
-
     // 회원가입 및 로그인
-    // try {
-    //   if (response.status === 200) {
-    //     const userInfo: object = await userService.checkNewUser(JSON.parse(result).response.id, 'naver');
-    //     return await this.createToken(userInfo);
-    //   } else {
-    //     return 'naver openAPI error:' + response.statusText;
-    //   }
-    // } catch(e) {
-    //   throw new Error(e);
-    // }
-    return 'YES'
+    try {
+      if (response.status === 200) {
+        const userInfo: object = await userService.checkNewUser(JSON.parse(result).id, 'kakao');
+        return await this.createToken(userInfo);
+      } else {
+        return 'kakao login openAPI error: ' + response.statusText;
+      }
+    } catch(e) {
+      throw new Error(e);
+    }
   }
 
   public async createToken(userInfo: any): Promise<string> {
-    console.info(userInfo.userIndex);
     return this.jwtService.sign({userIndex: userInfo.userIndex});
   }
 

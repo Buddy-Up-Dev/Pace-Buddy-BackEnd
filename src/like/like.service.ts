@@ -40,9 +40,17 @@ export class LikeService {
     try {
       await this.likeRepository.delete({ postIndex: postIndex, userIndex: userIndex });
       return true;
-    } catch (e) {
+    } catch(e) {
       throw new Error(e);
     }
+  }
 
+  public async deleteUserLike(userIndex: number): Promise<boolean> {
+    try {
+      await this.likeRepository.delete({ userIndex: userIndex });
+      return true;
+    } catch(e) {
+      throw new Error(e);
+    }
   }
 }
