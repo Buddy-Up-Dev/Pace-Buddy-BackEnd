@@ -144,11 +144,16 @@ export class PostService {
     const decode = await authService.decodeToken(token);
     const userIndex = decode['userIndex'];
 
+    // 유저의 최근 5개 기록 조회
+    const posts = await this.postRepository.find({
+      where: { userIndex: userIndex },
+      order: { uploadDate: 'DESC' },
+      take: 10
+    });
+
     // TODO: Add Report Algorithm
 
-    await reportService.getUserReport(userIndex)
-
-
+    //await reportService.getUserReport(userIndex)
     return 1;
   }
 
