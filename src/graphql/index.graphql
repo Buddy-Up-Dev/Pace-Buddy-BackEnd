@@ -44,4 +44,7 @@ type Mutation {
     ): Boolean!
     deleteUser: Boolean
     initData: Boolean
+    uploadProfile (
+        imgURL: String!
+    ): Boolean
 }
