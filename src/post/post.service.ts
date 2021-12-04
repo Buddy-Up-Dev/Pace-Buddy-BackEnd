@@ -133,6 +133,8 @@ export class PostService {
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
     const userIndex = decode['userIndex'];
+    console.info(userIndex);
+
     return 1;
   }
 
