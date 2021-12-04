@@ -23,4 +23,9 @@ export class UserResolver {
   async deleteUser(@Context() context: object): Promise<boolean> {
     return this.userService.deleteUser(context, this.postService, this.likeService, this.authService);
   }
+
+  @Mutation('uploadProfile')
+  async uploadProfile(@Context() context: object, @Args('imgURL') imgURL: string): Promise<boolean> {
+    return this.userService.uploadProfile(context, imgURL, this.authService);
+  }
 }

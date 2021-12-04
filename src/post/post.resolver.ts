@@ -4,6 +4,7 @@ import { Post, PostInformation } from "../graphql";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service";
 import { AuthService } from "../auth/auth.service";
+import { ReportService } from "../report/report.service";
 
 @Resolver()
 export class PostResolver {
@@ -11,7 +12,8 @@ export class PostResolver {
     private postService: PostService,
     private userService: UserService,
     private likeService: LikeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private reportService: ReportService
   ) {}
 
   @Query('getAllLatestPost')
@@ -34,7 +36,7 @@ export class PostResolver {
 
   @Query('reporting')
   async reporting(@Context() context: object): Promise<number> {
-    return await this.postService.reporting(context, this.authService);
+    return await this.postService.reporting(context, this.authService, this.reportService);
   }
 
   @Query('getMyDate')

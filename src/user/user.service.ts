@@ -9,7 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>
+      @InjectRepository(User) private userRepository: Repository<User>
   ) {
     this.userRepository = userRepository;
   }
@@ -127,6 +127,21 @@ export class UserService {
       // Like 테이블에서 해당 User 좋아요 삭제 ()
       await likeService.deleteUserLike(userIndex);
 
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  public async uploadProfile(context: any, imgURL: string, authService: any) {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
+    try {
+      const currUser = await this.userRepository.findOne({where: { userIndex: userIndex }});
+      currUser['profileImgURL'] = imgURL;
+      await this.userRepository.save(currUser);
       return true;
     } catch (e) {
       throw new Error(e);
