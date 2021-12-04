@@ -39,7 +39,9 @@ export class PostService {
       const specificPost: Post[] = await this.postRepository.find({ where: {exercise: exercise, feedOpen: 1} });
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
         await this.parseReturnData(specificPost, userIndex, userService, likeService);
+      console.info('test1');
       if (orderByFlag === 1) returnData.PostData = this.sortByPopularity(returnData);
+      console.info('test2');
       return returnData;
     } catch(e) {
       throw new Error(e);
