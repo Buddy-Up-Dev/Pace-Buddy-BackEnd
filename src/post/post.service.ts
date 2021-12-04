@@ -11,8 +11,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class PostService {
-  constructor(@InjectRepository(Post) private postRepository: Repository<Post>,) {
-    this.postRepository = postRepository
+  constructor(@InjectRepository(Post) private postRepository: Repository<Post>) {
+    this.postRepository = postRepository;
   }
 
   public async getAllLatestPost(context: any, orderByFlag: number, userService: any, likeService: any, authService: any)
@@ -21,10 +21,10 @@ export class PostService {
     let userIndex = -1;
     const req = context.req.headers.authorization;
     console.info(req);
-    if(req !== undefined) {
+    if (req !== undefined) {
       const token = req.substr(7, req.length - 7);
       const decode = await authService.decodeToken(token);
-      userIndex = decode['userIndex'];
+      userIndex = decode["userIndex"];
       console.info(userIndex);
     }
 
@@ -45,20 +45,20 @@ export class PostService {
     let userIndex = -1;
     const req = context.req.headers.authorization;
     console.info(req);
-    if(req !== undefined) {
+    if (req !== undefined) {
       const token = req.substr(7, req.length - 7);
       const decode = await authService.decodeToken(token);
-      userIndex = decode['userIndex'];
+      userIndex = decode["userIndex"];
       console.info(userIndex);
     }
 
     try {
-      const specificPost: Post[] = await this.postRepository.find({ where: {exercise: exercise, feedOpen: 1} });
+      const specificPost: Post[] = await this.postRepository.find({ where: { exercise: exercise, feedOpen: 1 } });
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
         await this.parseReturnData(specificPost, userIndex, userService, likeService);
       if (orderByFlag === 1) returnData.PostData = this.sortByPopularity(returnData.PostData);
       return returnData;
-    } catch(e) {
+    } catch (e) {
       throw new Error(e);
     }
   }
@@ -69,10 +69,10 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
 
     try {
-      const allMyPost: Post[] = await this.postRepository.find({where: {userIndex: userIndex, feedOpen: 1}})
+      const allMyPost: Post[] = await this.postRepository.find({ where: { userIndex: userIndex, feedOpen: 1 } });
       return await this.parseReturnData(allMyPost, userIndex, userService, likeService);
     } catch (e) {
       throw new Error("Error: " + e);
@@ -87,7 +87,7 @@ export class PostService {
         Post: node,
         User: await userService.getUser(node.userIndex),
         Like: await likeService.getLikeByPost(node.postIndex)
-      })
+      });
       node.uploadDate = JSON.stringify(node.uploadDate).slice(6, 8) + "." + JSON.stringify(node.uploadDate).slice(9, 11);
     }
     const returnLike = await this.getLikeCount(userIndex, likeService);
@@ -95,7 +95,7 @@ export class PostService {
     return getPostData.getPostData();
   }
 
-  private sortByPopularity(data): PostDataDto['PostData'] {
+  private sortByPopularity(data): PostDataDto["PostData"] {
     return data.sort((a, b) => {
       return parseFloat(b.Like) - parseFloat(a.Like);
     });
@@ -105,11 +105,11 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
     try {
       await this.postRepository.save(new Post(userIndex, uploadDate, exercise, content, condition, feedOpen).getPostInfo());
       return true;
-    } catch(e) {
+    } catch (e) {
       throw new Error(e);
     }
   }
@@ -118,7 +118,7 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
     try {
       if (isDelete) {
         await likeService.deleteLike(postIndex, userIndex);
@@ -127,7 +127,7 @@ export class PostService {
         await likeService.addLike(postIndex, userIndex);
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       throw new Error(e);
     }
   }
@@ -142,29 +142,24 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
 
     // 유저의 최근 5개 기록 조회
     const posts = await this.postRepository.find({
       where: { userIndex: userIndex },
-      order: { uploadDate: 'DESC' },
+      order: { uploadDate: "DESC" },
       take: 10
     });
 
     // TODO: Add Report Algorithm
 
-    let tempArr: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
-    // console.info(typeof tempArr);
-    // @ts-ignore
     const condition = (posts.reduce((acc, x) => acc + x.condition, 0) / 10).toFixed();
-    // @ts-ignore
-    const exercise = posts.map(node => node.exercise).reduce((acc, x: number) => {
-      tempArr[x] += 1;
-    })
-
-
+    const mostExercise = posts.map(node => node.exercise).reduce((acc, x) => {
+      acc[x]++;
+      return acc;
+    }, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);   // 최대 운동 종류 11개
     const date = posts.map(node => node.uploadDate);
-    //await reportService.getUserReport(userIndex)
+
     return 1;
   }
 
@@ -172,9 +167,10 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
     try {
-      return (await this.postRepository.find({ select: ["uploadDate"],
+      return (await this.postRepository.find({
+        select: ["uploadDate"],
         where: { userIndex: userIndex }
       })).map(node => node.uploadDate);
     } catch (e) {
@@ -186,7 +182,7 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
     try {
       await this.postRepository.save({
         postIndex: postIndex, uploadDate: uploadDate, exercise: exercise,
@@ -202,7 +198,7 @@ export class PostService {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    const userIndex = decode["userIndex"];
     try {
       await this.postRepository.delete({ postIndex: postIndex });
       return true;
