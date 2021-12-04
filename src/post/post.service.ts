@@ -20,10 +20,12 @@ export class PostService {
 
     let userIndex = -1;
     const req = context.req.headers.authorization;
+    console.info(req);
     if(req !== undefined) {
       const token = req.substr(7, req.length - 7);
       const decode = await authService.decodeToken(token);
       userIndex = decode['userIndex'];
+      console.info(userIndex);
     }
 
     try {
@@ -42,10 +44,12 @@ export class PostService {
 
     let userIndex = -1;
     const req = context.req.headers.authorization;
+    console.info(req);
     if(req !== undefined) {
       const token = req.substr(7, req.length - 7);
       const decode = await authService.decodeToken(token);
       userIndex = decode['userIndex'];
+      console.info(userIndex);
     }
 
     try {
