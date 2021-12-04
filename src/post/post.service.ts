@@ -153,8 +153,17 @@ export class PostService {
 
     // TODO: Add Report Algorithm
 
-    const condition = posts.map(node => node.condition);
-    console.info(condition)
+    let tempArr: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
+    // console.info(typeof tempArr);
+    // @ts-ignore
+    const condition = (posts.reduce((acc, x) => acc + x.condition, 0) / 10).toFixed();
+    // @ts-ignore
+    const exercise = posts.map(node => node.exercise).reduce((acc, x: number) => {
+      tempArr[x] += 1;
+    })
+
+
+    const date = posts.map(node => node.uploadDate);
     //await reportService.getUserReport(userIndex)
     return 1;
   }
