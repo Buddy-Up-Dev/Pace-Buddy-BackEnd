@@ -138,14 +138,14 @@ export class PostService {
   }
 
   // TODO : report 기능 구체화
-  public async reporting(context: any, authService: any,): Promise<number> {
+  public async reporting(context: any, authService: any, reportService: any): Promise<number> {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
     const userIndex = decode['userIndex'];
     console.info(userIndex);
 
-    this.postRepository.findOne({userIndex: userIndex})
+    await reportService.getUserReport(userIndex)
 
 
     return 1;

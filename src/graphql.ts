@@ -23,10 +23,6 @@ export abstract class IQuery {
     abstract getMyDate(): Nullable<string[]> | Promise<Nullable<string[]>>;
 
     abstract userNickname(): string | Promise<string>;
-
-    abstract testORM(): Nullable<Nullable<Post>[]> | Promise<Nullable<Nullable<Post>[]>>;
-
-    abstract testToken(): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export abstract class IMutation {
@@ -45,6 +41,8 @@ export abstract class IMutation {
     abstract likePost(postIndex: number, isDelete?: Nullable<boolean>): boolean | Promise<boolean>;
 
     abstract deleteUser(): Nullable<boolean> | Promise<Nullable<boolean>>;
+
+    abstract initData(): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export class Post {
