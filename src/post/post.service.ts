@@ -76,6 +76,7 @@ export class PostService {
   }
 
   private sortByPopularity(data): PostDataDto['PostData'] {
+    console.info(data);
     return data.sort((a, b) => {
       return parseFloat(b.Like) - parseFloat(a.Like);
     });
