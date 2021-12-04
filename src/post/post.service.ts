@@ -143,7 +143,8 @@ export class PostService {
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
     const userIndex = decode['userIndex'];
-    console.info(userIndex);
+
+    // TODO: Add Report Algorithm
 
     await reportService.getUserReport(userIndex)
 
