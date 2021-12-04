@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { getConnection, getRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
 import { Post } from "./post.entity";
-import { User } from "../user/user.entity";
 import { Like } from "../like/like.entity";
 
 import { PostDataDto } from "./DTO/post-data-dto";
@@ -16,10 +15,13 @@ export class PostService {
     this.postRepository = postRepository
   }
 
-  public async getAllLatestPost(context: object, orderByFlag: number, userService: any, likeService: any)
+  public async getAllLatestPost(context: any, orderByFlag: number, userService: any, likeService: any, authService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    let userIndex: number = 1;
-    // TODO: JWT Logic
+
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
 
     try {
       const allLatestPost: Post[] = await this.postRepository.find();
@@ -32,9 +34,14 @@ export class PostService {
     }
   }
 
-  public async getSpecificExercise(context: object, orderByFlag: number, exercise: number, userService: any, likeService: any)
+  public async getSpecificExercise(context: any, orderByFlag: number, exercise: number, userService: any, likeService: any, authService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    let userIndex: number = 1;
+
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
+
     try {
       const specificPost: Post[] = await this.postRepository.find({ where: {exercise: exercise, feedOpen: 1} });
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
@@ -48,9 +55,14 @@ export class PostService {
     }
   }
 
-  public async getMyPost(context: object, userService: any, likeService: any)
+  public async getMyPost(context: any, userService: any, likeService: any, authService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    let userIndex: number = 1;
+
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
+
     try {
       const allMyPost: Post[] = await this.postRepository.find({where: {userIndex: userIndex, feedOpen: 1}})
       return await this.parseReturnData(allMyPost, userIndex, userService, likeService);
@@ -82,9 +94,11 @@ export class PostService {
     });
   }
 
-  // TODO : JWT Logic
-  async addPost(context: object, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
-    let userIndex: number = 1;
+  async addPost(context: any, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number, authService: any): Promise<boolean> {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
     try {
       await this.postRepository.save(new Post(userIndex, uploadDate, exercise, content, condition, feedOpen).getPostInfo());
       return true;
@@ -93,9 +107,11 @@ export class PostService {
     }
   }
 
-  // TODO : JWT Logic
-  async likePost(context: object, postIndex: number, isDelete: boolean, likeService: any): Promise<boolean> {
-    let userIndex: number = 1;
+  async likePost(context: any, postIndex: number, isDelete: boolean, likeService: any, authService: any): Promise<boolean> {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
     try {
       if (isDelete) {
         await likeService.deleteLike(postIndex, userIndex);
@@ -114,27 +130,36 @@ export class PostService {
     return likeArray.map(node => node.postIndex);
   }
 
-  public async reporting(context: object): Promise<number> {
-    const userIndex: number = 1;
+  // TODO : report 기능 구체화
+  public async reporting(context: any, authService: any): Promise<number> {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
+    console.info(userIndex);
+
     return 1;
   }
 
-  // TODO : JWT Logic
-  public async getMyDate(context: object): Promise<string[]> {
-    const userIndex: number = 1;
+  public async getMyDate(context: any, authService: any): Promise<string[]> {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
     try {
       return (await this.postRepository.find({ select: ["uploadDate"],
         where: { userIndex: userIndex }
       })).map(node => node.uploadDate);
-
     } catch (e) {
       throw new Error(e);
     }
   }
 
-  // TODO : JWT logic
-  public async modifyPost(context: object, postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number): Promise<boolean> {
-    const userIndex: number = 1;
+  public async modifyPost(context: any, postIndex: number, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number, authService: any): Promise<boolean> {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
     try {
       await this.postRepository.save({
         postIndex: postIndex, uploadDate: uploadDate, exercise: exercise,
@@ -146,11 +171,22 @@ export class PostService {
     }
   }
 
-  // TODO : JWT Logic
-  public async deletePost(context: object, postIndex: number): Promise<boolean> {
-    const userIndex: number = 1;
+  public async deletePost(context: any, postIndex: number, authService: any): Promise<boolean> {
+    const req = context.req.headers.authorization;
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService.decodeToken(token);
+    const userIndex = decode['userIndex'];
     try {
-      await this.postRepository.delete({postIndex: postIndex});
+      await this.postRepository.delete({ postIndex: postIndex });
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  public async deleteUserPost(userIndex: number): Promise<boolean> {
+    try {
+      await this.postRepository.delete({ userIndex: userIndex });
       return true;
     } catch (e) {
       throw new Error(e);
