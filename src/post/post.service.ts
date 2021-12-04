@@ -18,10 +18,13 @@ export class PostService {
   public async getAllLatestPost(context: any, orderByFlag: number, userService: any, likeService: any, authService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
 
+    let userIndex = -1;
     const req = context.req.headers.authorization;
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    if(req !== undefined) {
+      const token = req.substr(7, req.length - 7);
+      const decode = await authService.decodeToken(token);
+      userIndex = decode['userIndex'];
+    }
 
     try {
       const allLatestPost: Post[] = await this.postRepository.find();
@@ -37,10 +40,13 @@ export class PostService {
   public async getSpecificExercise(context: any, orderByFlag: number, exercise: number, userService: any, likeService: any, authService: any)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
 
+    let userIndex = -1;
     const req = context.req.headers.authorization;
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService.decodeToken(token);
-    const userIndex = decode['userIndex'];
+    if(req !== undefined) {
+      const token = req.substr(7, req.length - 7);
+      const decode = await authService.decodeToken(token);
+      userIndex = decode['userIndex'];
+    }
 
     try {
       const specificPost: Post[] = await this.postRepository.find({ where: {exercise: exercise, feedOpen: 1} });
