@@ -43,4 +43,5 @@ type Mutation {
         isDelete: Boolean
     ): Boolean!
     deleteUser: Boolean
+    initData: Boolean
 }
