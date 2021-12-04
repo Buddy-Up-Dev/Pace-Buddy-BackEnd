@@ -7,4 +7,5 @@ export class User {
   @Column({length: 600}) userName: string;
   @Column({length: 600, nullable: true}) naverID: string;
   @Column({length: 600, nullable: true}) kakaoID: string;
+  @Column({length: 600, nullable: true}) profileImgURL: string;
 }
