@@ -43,6 +43,8 @@ export abstract class IMutation {
     abstract deleteUser(): Nullable<boolean> | Promise<Nullable<boolean>>;
 
     abstract initData(): Nullable<boolean> | Promise<Nullable<boolean>>;
+
+    abstract uploadProfile(imgURL: string): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export class Post {
