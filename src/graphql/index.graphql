@@ -11,8 +11,6 @@ type Query{
     reporting: Int!
     getMyDate: [String!]
     userNickname: String!
-    testORM: [Post]
-    testToken: Boolean
 }
 
 type Mutation {
