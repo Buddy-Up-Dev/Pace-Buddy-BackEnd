@@ -153,6 +153,8 @@ export class PostService {
 
     // TODO: Add Report Algorithm
 
+    const condition = posts.map(node => node.condition);
+    console.info(condition)
     //await reportService.getUserReport(userIndex)
     return 1;
   }
