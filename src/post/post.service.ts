@@ -135,16 +135,16 @@ export class PostService {
     }
   }
 
-  public async getLikeCount(userIndex: number, likeService: any): Promise<number[]> {
-    const likeArray: Like[] = await likeService.getLikeByUser(userIndex);
+  public async getLikeCount(userIndex: number, likeService: object): Promise<number[]> {
+    const likeArray: Like[] = await likeService['getLikeByUser'](userIndex);
     return likeArray.map(node => node.postIndex);
   }
 
   // TODO : report 기능 구체화
-  public async reporting(context: any, authService: any, reportService: any): Promise<number> {
+  public async reporting(context: any, authService: object, reportService: object): Promise<number> {
     const req: string = context.req.headers.authorization;
     const token: string = req.substr(7, req.length - 7);
-    const decode: object = await authService.decodeToken(token);
+    const decode: object = await authService['decodeToken'](token);
     const userIndex: number = decode["userIndex"];
 
     // 유저의 최근 5개 기록 조회
@@ -156,7 +156,8 @@ export class PostService {
     });
 
     const returnData: object = await this.getReportData(posts);
-    const condition = await reportService.getReportData(returnData['condition']);
+    const condition = await reportService['getReportData'](returnData['condition']);
+    console.info(typeof reportService);
     console.log('condition >', condition);
 
     return 1;
