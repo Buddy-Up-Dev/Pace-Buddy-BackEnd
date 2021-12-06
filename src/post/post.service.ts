@@ -104,7 +104,7 @@ export class PostService {
     });
   }
 
-  async addPost(context: any, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number, authService: any): Promise<boolean> {
+  public async addPost(context: any, uploadDate: string, exercise: number, content: string, condition: number, feedOpen: number, authService: any): Promise<boolean> {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
@@ -117,7 +117,7 @@ export class PostService {
     }
   }
 
-  async likePost(context: any, postIndex: number, isDelete: boolean, likeService: any, authService: any): Promise<boolean> {
+  public async likePost(context: any, postIndex: number, isDelete: boolean, likeService: any, authService: any): Promise<boolean> {
     const req = context.req.headers.authorization;
     const token = req.substr(7, req.length - 7);
     const decode = await authService.decodeToken(token);
@@ -135,7 +135,7 @@ export class PostService {
     }
   }
 
-  async getLikeCount(userIndex: number, likeService: any): Promise<number[]> {
+  public async getLikeCount(userIndex: number, likeService: any): Promise<number[]> {
     const likeArray: Like[] = await likeService.getLikeByUser(userIndex);
     return likeArray.map(node => node.postIndex);
   }
@@ -149,17 +149,20 @@ export class PostService {
 
     // 유저의 최근 5개 기록 조회
     const posts: any = await this.postRepository.find({
+      select: ['condition', 'exercise', 'uploadDate'],
       where: { userIndex: userIndex },
       order: { uploadDate: "DESC" },
       take: 10
     });
 
-    const returnData: object = await this._getReportData(posts)
+    const returnData: object = await this.getReportData(posts);
+    const condition = await reportService.getReportData(returnData['condition']);
+    console.log('condition >', condition);
 
     return 1;
   }
 
-  public async _getReportData({posts}): Promise<object> {
+  public async getReportData(posts: any): Promise<object> {
     const condition = (posts.reduce((acc, x) => acc + x.condition, 0) / 10).toFixed();
     const exercise = posts.map(node => node.exercise).reduce((acc, x) => {
       acc[x]++;
@@ -169,17 +172,16 @@ export class PostService {
     let exerciseIndex = null;
 
     for (let i = 1; i < 12; i++) {
-      if(exercise[i] > mostExercise) {
+      if (exercise[i] > mostExercise) {
         mostExercise = exercise[i];
         exerciseIndex = i;
       }
     }
 
-    const date = posts.map(node => node.uploadDate);
+    const date = posts.map(node => node.uploadDate).reverse();
 
-    return {}
+    return { condition: condition, exerciseIndex: exerciseIndex, date: date }
   }
-
 
   public async getMyDate(context: any, authService: any): Promise<string[]> {
     const req = context.req.headers.authorization;
@@ -233,4 +235,7 @@ export class PostService {
       throw new Error(e);
     }
   }
+
+
+
 }
