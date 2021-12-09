@@ -190,9 +190,18 @@ export class PostService {
     return { condition: condition, exerciseIndex: exerciseIndex, date: date }
   }
 
-  public async getDateData(dateList: string[]): Promise<string> {
-    console.log('dateList >', dateList);
+  private getDateData(dateList: string[]): string {
+    const newDateList: Date[] = this.stringToDate(dateList);
+    // TODO : newDateList의 요소 간 날짜 차이 구하기
+    console.log('newDateList >', newDateList);
+    console.log('날짜 차이 test >', newDateList[1].getDate() - newDateList[0].getDate());
     return 'a';
+  }
+
+  private stringToDate(dateList: string[]): Date[] {
+    return dateList.map(date =>
+        new Date(Number(date.split('.')[0]), Number(date.split('.')[1]) - 1, Number(date.split('.')[2]))
+    );
   }
 
   public async getMyDate(context: object, authService: object): Promise<string[]> {
