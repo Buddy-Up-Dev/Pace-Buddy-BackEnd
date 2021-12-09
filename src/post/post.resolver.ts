@@ -5,6 +5,7 @@ import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service";
 import { AuthService } from "../auth/auth.service";
 import { ReportService } from "../report/report.service";
+import { ExerciseService } from "../exercise/exercise.service";
 
 @Resolver()
 export class PostResolver {
@@ -13,7 +14,8 @@ export class PostResolver {
     private userService: UserService,
     private likeService: LikeService,
     private authService: AuthService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private exerciseService: ExerciseService
   ) {}
 
   @Query('getAllLatestPost')
@@ -36,7 +38,7 @@ export class PostResolver {
 
   @Query('reporting')
   async reporting(@Context() context: object): Promise<number> {
-    return await this.postService.reporting(context, this.authService, this.reportService);
+    return await this.postService.reporting(context, this.authService, this.reportService, this.exerciseService);
   }
 
   @Query('getMyDate')

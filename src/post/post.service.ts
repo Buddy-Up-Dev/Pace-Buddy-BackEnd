@@ -143,7 +143,7 @@ export class PostService {
   }
 
   // TODO : report 기능 구체화
-  public async reporting(context: object, authService: object, reportService: object): Promise<number> {
+  public async reporting(context: object, authService: object, reportService: object, exerciseService: object): Promise<number> {
     const req = context['req']['headers']['authorization'];
     const token: string = req.substr(7, req.length - 7);
     const decode: object = await authService['decodeToken'](token);
@@ -159,8 +159,12 @@ export class PostService {
 
     const returnData: object = await this.getReportData(posts);
     const condition = await reportService['getReportData'](returnData['condition']);
-    console.info(typeof reportService);
+    const exercise = await exerciseService['getExerciseName'](returnData['exerciseIndex']);
+    const date = await this.getDateData(returnData['date']);
+
     console.log('condition >', condition);
+    console.log('exercise >', exercise);
+    console.log('date >', date);
 
     return 1;
   }
@@ -184,6 +188,20 @@ export class PostService {
     const date = posts.map(node => node.uploadDate).reverse();
 
     return { condition: condition, exerciseIndex: exerciseIndex, date: date }
+  }
+
+  private getDateData(dateList: string[]): string {
+    const newDateList: Date[] = this.stringToDate(dateList);
+    // TODO : newDateList의 요소 간 날짜 차이 구하기
+    console.log('newDateList >', newDateList);
+    console.log('날짜 차이 test >', newDateList[1].getDate() - newDateList[0].getDate());
+    return 'a';
+  }
+
+  private stringToDate(dateList: string[]): Date[] {
+    return dateList.map(date =>
+        new Date(Number(date.split('.')[0]), Number(date.split('.')[1]) - 1, Number(date.split('.')[2]))
+    );
   }
 
   public async getMyDate(context: object, authService: object): Promise<string[]> {
