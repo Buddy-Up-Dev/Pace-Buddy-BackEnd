@@ -143,7 +143,7 @@ export class PostService {
   }
 
   // TODO : report 기능 구체화
-  public async reporting(context: object, authService: object, reportService: object): Promise<number> {
+  public async reporting(context: object, authService: object, reportService: object, exerciseService: object): Promise<number> {
     const req = context['req']['headers']['authorization'];
     const token: string = req.substr(7, req.length - 7);
     const decode: object = await authService['decodeToken'](token);
@@ -159,8 +159,12 @@ export class PostService {
 
     const returnData: object = await this.getReportData(posts);
     const condition = await reportService['getReportData'](returnData['condition']);
-    console.info(typeof reportService);
+    const exercise = await exerciseService['getExerciseName'](returnData['exerciseIndex']);
+    const date = await this.getDateData(returnData['date']);
+
     console.log('condition >', condition);
+    console.log('exercise >', exercise);
+    console.log('date >', date);
 
     return 1;
   }
@@ -184,6 +188,11 @@ export class PostService {
     const date = posts.map(node => node.uploadDate).reverse();
 
     return { condition: condition, exerciseIndex: exerciseIndex, date: date }
+  }
+
+  public async getDateData(dateList: string[]): Promise<string> {
+    console.log('dateList >', dateList);
+    return 'a';
   }
 
   public async getMyDate(context: object, authService: object): Promise<string[]> {
