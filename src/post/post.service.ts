@@ -190,26 +190,16 @@ export class PostService {
     return { condition: condition, exerciseIndex: exerciseIndex, date: date };
   }
 
-  private getDateData(dateList: string[]): string {
+  private getDateData(dateList: string[]): boolean {
+    let count = 1;
     const newDateList: Date[] = this.stringToDate(dateList);
-    // console.log('newDateList >', newDateList);
-    // console.log('날짜 차이 test >', newDateList[1].getDate() - newDateList[0].getDate());
-    // console.info(newDateList[1].getDate());
 
-    // const result = newDateList.reduce((acc, x, index, array) => {
-    //   console.info(array[index]);
-    //   array[index].getDate() - array[index-1].getDate()
-    //   return 5;
-    // })
+    for (let i = 0; i < newDateList.length - 1; i++) {
+      if(Math.ceil((newDateList[i + 1].getTime() - newDateList[i].getTime()) / (1000 * 3600 * 24)) <= 2) count++;
+      else count = 1;
+    }
 
-    // TODO: 앞 Node도 포함시켜야 함 (Array 보다 Counting 이 적절한 방법)
-    const result = newDateList.filter((node, index, array) => {
-      if (index > array.length - 2) return;
-      return Math.ceil((array[index + 1].getTime() - array[index].getTime()) / (1000*3600*24)) <= 2;
-    });
-
-
-    return "a";
+    return count >= 5;
   }
 
   private stringToDate(dateList: string[]): Date[] {
