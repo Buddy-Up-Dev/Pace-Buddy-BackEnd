@@ -15,20 +15,9 @@ export class ReportService {
         select: ['ment', 'imgURL'],
         where: {condition: condition},
       })
-      //console.log('data >', data);
       const ranIdx = Math.floor(Math.random() * 3);
       const mentList = data['ment'].split(' , ');
       return { ment: mentList[ranIdx], imgURL: data['imgURL'] };
-    } catch (e) {
-      throw new Error(e);
-    }
-  }
-
-  public async getUserReport(data: number): Promise<Report> {
-    try {
-      const test = await this.reportRepository.findOne({reportIndex: 1});
-      console.info(test);
-      return test;
     } catch (e) {
       throw new Error(e);
     }
