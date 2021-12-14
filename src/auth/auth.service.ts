@@ -12,7 +12,6 @@ export class AuthService {
   public async tokenTest(context: object): Promise<string> {
     const payload: object = {userIndex: 1};
     const jwtToken = this.jwtService.sign(payload);
-    console.info('jwt >', jwtToken);
     return 'a';
   }
 

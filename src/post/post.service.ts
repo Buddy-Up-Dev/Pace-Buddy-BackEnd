@@ -1,13 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
+import {Injectable} from "@nestjs/common";
+import {Repository} from "typeorm";
 
-import { Post } from "./post.entity";
-import { Like } from "../like/like.entity";
+import {Post} from "./post.entity";
+import {Like} from "../like/like.entity";
 
-import { PostDataDto } from "./DTO/post-data-dto";
-import { PostInformation } from "../graphql";
+import {PostDataDto} from "./DTO/post-data-dto";
+import {PostInformation, ReportData} from "../graphql";
 
-import { InjectRepository } from "@nestjs/typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
 export class PostService {
@@ -24,7 +24,6 @@ export class PostService {
       const token = req.substr(7, req.length - 7);
       const decode = await authService["decodeToken"](token);
       userIndex = decode["userIndex"];
-      console.info(userIndex);
     }
 
     try {
@@ -44,12 +43,10 @@ export class PostService {
 
     let userIndex = -1;
     const req = context["req"]["headers"]["authorization"];
-    console.info(req);
     if (req !== undefined) {
       const token = req.substr(7, req.length - 7);
       const decode = await authService["decodeToken"](token);
       userIndex = decode["userIndex"];
-      console.info(userIndex);
     }
 
     try {
@@ -98,7 +95,6 @@ export class PostService {
   }
 
   private sortByPopularity(data): PostDataDto["PostData"] {
-    console.info(data);
     return data.sort((a, b) => {
       return parseFloat(b.Like) - parseFloat(a.Like);
     });
@@ -142,8 +138,7 @@ export class PostService {
     return likeArray.map(node => node.postIndex);
   }
 
-  // TODO : report 기능 구체화
-  public async reporting(context: object, authService: object, reportService: object, exerciseService: object): Promise<number> {
+  public async reporting(context: object, authService: object, reportService: object, exerciseService: object): Promise<ReportData> {
     const req = context["req"]["headers"]["authorization"];
     const token: string = req.substr(7, req.length - 7);
     const decode: object = await authService["decodeToken"](token);
@@ -157,16 +152,24 @@ export class PostService {
       take: 10
     });
 
-    const returnData: object = await this.getReportData(posts);
-    const condition = await reportService["getReportData"](returnData["condition"]);
-    const exercise = await exerciseService["getExerciseName"](returnData["exerciseIndex"]);
-    const date = await this.getDateData(returnData["date"]);
+    const postData: object = await this.getReportData(posts);
+    const condition = await reportService["getReportData"](postData["condition"]);
+    const exercise = await exerciseService["getExerciseName"](postData["exerciseIndex"]);
+    const date = await this.getDateData(postData["date"]);
+    let exerciseType;
 
-    console.log("condition >", condition);
-    console.log("exercise >", exercise);
-    console.log("date >", date);
+    if (date == true) {
+      exerciseType = "성실하게 꼬박꼬박 하는 편이에요."
+    } else {
+      exerciseType = "지치지 않고 찬찬히 하는 편이에요."
+    }
 
-    return 1;
+    return {
+      conditionMent: condition['ment'],
+      conditionImgURL: condition['imgURL'],
+      exerciseName: exercise,
+      exerciseType: exerciseType
+    };
   }
 
   public async getReportData(posts: Post[]): Promise<object> {
@@ -262,6 +265,4 @@ export class PostService {
       throw new Error(e);
     }
   }
-
-
 }

@@ -8,7 +8,7 @@ type Query{
     ): PostData!
     getMyPost: PostData!
     getExercise: [Exercise]!
-    reporting: Int!
+    reporting: ReportData!
     getMyDate: [String!]
     userNickname: String!
 }
