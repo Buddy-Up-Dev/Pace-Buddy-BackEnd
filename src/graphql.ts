@@ -18,7 +18,7 @@ export abstract class IQuery {
 
     abstract getExercise(): Nullable<Exercise>[] | Promise<Nullable<Exercise>[]>;
 
-    abstract reporting(): number | Promise<number>;
+    abstract reporting(): ReportData | Promise<ReportData>;
 
     abstract getMyDate(): Nullable<string[]> | Promise<Nullable<string[]>>;
 
@@ -75,6 +75,14 @@ export class Exercise {
     __typename?: 'Exercise';
     exerciseIndex: number;
     exerciseName: string;
+}
+
+export class ReportData {
+    __typename?: 'ReportData';
+    conditionMent: string;
+    conditionImgURL: string;
+    exerciseName: string;
+    exerciseType: string;
 }
 
 export class User {

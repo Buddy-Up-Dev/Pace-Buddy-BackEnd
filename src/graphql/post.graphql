@@ -24,3 +24,10 @@ type Exercise {
     exerciseIndex: Int!
     exerciseName: String!
 }
+
+type ReportData {
+    conditionMent: String!
+    conditionImgURL: String!
+    exerciseName: String!
+    exerciseType: String!
+}

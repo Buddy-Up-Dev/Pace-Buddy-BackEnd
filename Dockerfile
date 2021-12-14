@@ -38,6 +38,8 @@ WORKDIR /app
 ENV NODE_ENV="development"
 ENV DOCKER_ENV="development"
 
+ENV PATH ./.env
+
 ## Copy the necessary files form builder
 COPY --from=builder "/app/dist/" "/app/dist/"
 COPY --from=builder "/app/node_modules/" "/app/node_modules/"
