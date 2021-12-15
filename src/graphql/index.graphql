@@ -11,6 +11,7 @@ type Query{
     reporting: ReportData!
     getMyDate: [String!]
     userNickname: String!
+    hasProfile: ProfileData!
 }
 
 type Mutation {

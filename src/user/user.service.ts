@@ -133,16 +133,42 @@ export class UserService {
     }
   }
 
-  public async uploadProfile(context: any, imgURL: string, authService: any) {
-    const req = context.req.headers.authorization;
+  public async uploadProfile(context: object, imgURL: string, authService: object) {
+    const req = context["req"]["headers"]["authorization"];
     const token = req.substr(7, req.length - 7);
-    const decode = await authService.decodeToken(token);
+    const decode = await authService["decodeToken"](token);
     const userIndex = decode['userIndex'];
     try {
       const currUser = await this.userRepository.findOne({where: { userIndex: userIndex }});
       currUser['profileImgURL'] = imgURL;
       await this.userRepository.save(currUser);
       return true;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  public async getProfileInfo(context: object, authService: object) {
+    const req = context["req"]["headers"]["authorization"];
+    const token = req.substr(7, req.length - 7);
+    const decode = await authService["decodeToken"](token);
+    const userIndex = decode['userIndex'];
+    try {
+      const info = await this.userRepository.findOne({
+        select: ['profileImgURL'],
+        where: { userIndex: userIndex }
+      });
+      if (info['profileImgURL']) {
+        return {
+          hasProfile: true,
+          imgURL: info['profileImgURL']
+        }
+      } else {
+        return {
+          hasProfile: false,
+          imgURL: 'none'
+        }
+      }
     } catch (e) {
       throw new Error(e);
     }
