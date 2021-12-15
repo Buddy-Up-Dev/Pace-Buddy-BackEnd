@@ -23,6 +23,8 @@ export abstract class IQuery {
     abstract getMyDate(): Nullable<string[]> | Promise<Nullable<string[]>>;
 
     abstract userNickname(): string | Promise<string>;
+
+    abstract hasProfile(): ProfileData | Promise<ProfileData>;
 }
 
 export abstract class IMutation {
@@ -83,6 +85,12 @@ export class ReportData {
     conditionImgURL: string;
     exerciseName: string;
     exerciseType: string;
+}
+
+export class ProfileData {
+    __typename?: 'ProfileData';
+    hasProfile: boolean;
+    imgURL: string;
 }
 
 export class User {

@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { PostService } from "../post/post.service";
 import { LikeService } from "../like/like.service";
 import { AuthService } from "../auth/auth.service";
+import { Post, ProfileData } from "../graphql";
 
 @Resolver()
 export class UserResolver {
@@ -17,6 +18,11 @@ export class UserResolver {
   @Query('userNickname')
   async userNickname(@Context() context: object): Promise<string> {
     return this.userService.getUserNickname(context, this.authService);
+  }
+
+  @Query('hasProfile')
+  async hasProfile(@Context() context: object): Promise<ProfileData> {
+    return this.userService.getProfileInfo(context, this.authService);
   }
 
   @Mutation('deleteUser')
