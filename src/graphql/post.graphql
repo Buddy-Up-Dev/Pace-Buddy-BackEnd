@@ -31,3 +31,8 @@ type ReportData {
     exerciseName: String!
     exerciseType: String!
 }
+
+type ProfileData {
+    hasProfile: Boolean!
+    imgURL: String!
+}
