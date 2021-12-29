@@ -16,10 +16,7 @@ export class UserService {
   }
 
   public async getUserNickname(context: object, authService: object): Promise<string> {
-    const req: string = context['req']['headers']['authorization'];
-    const token: string = req.substr(7, req.length - 7);
-    const decode: object = await authService['decodeToken'](token);
-    const userIndex: number = decode['userIndex'];
+    const userIndex = await this.getUserIndex(context, authService);
 
     const data: object = await this.userRepository.findOne({
       select: ['userName'],
@@ -106,13 +103,8 @@ export class UserService {
     }
   }
 
-  // TODO : JWT LOGIC
   public async deleteUser(context: object, postService: object, likeService: object, authService: object): Promise<boolean> {
-    // const req: string = context['req']['headers']['authorization'];
-    // const token: string = req.substr(7, req.length - 7);
-    // const decode: object = await authService['decodeToken'](token);
-    // const userIndex: number = decode['userIndex'];
-    const userIndex = 18;
+    const userIndex = await this.getUserIndex(context, authService);
 
     try {
       // User 테이블에서 삭제
@@ -128,10 +120,8 @@ export class UserService {
   }
 
   public async uploadProfile(context: object, imgURL: string, authService: object) {
-    const req: string = context['req']['headers']['authorization'];
-    const token: string = req.substr(7, req.length - 7);
-    const decode: object = await authService['decodeToken'](token);
-    const userIndex: number = decode['userIndex'];
+    const userIndex = await this.getUserIndex(context, authService);
+
     try {
       const currUser: object = await this.userRepository.findOne({ where: { userIndex: userIndex } });
       currUser['profileImgURL'] = imgURL;
@@ -143,10 +133,8 @@ export class UserService {
   }
 
   public async getProfileInfo(context: object, authService: object) {
-    const req: string = context['req']['headers']['authorization'];
-    const token: string = req.substr(7, req.length - 7);
-    const decode: object = await authService['decodeToken'](token);
-    const userIndex: number = decode['userIndex'];
+    const userIndex = await this.getUserIndex(context, authService);
+
     try {
       const info: object = await this.userRepository.findOne({
         select: ['profileImgURL'],
@@ -166,5 +154,12 @@ export class UserService {
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  private async getUserIndex(context: object, authService: object): Promise<number> {
+    const req: string = context['req']['headers']['authorization'];
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService['decodeToken'](token);
+    return decode['userIndex'];
   }
 }
