@@ -1,10 +1,10 @@
-import {Injectable} from "@nestjs/common";
-import {Repository} from "typeorm";
-import {Post} from "./post.entity";
-import {Like} from "../like/like.entity";
-import {PostDataDto} from "./DTO/post-data-dto";
-import {PostInformation, ReportData} from "../graphql";
-import {InjectRepository} from "@nestjs/typeorm";
+import { Injectable } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { Post } from "./post.entity";
+import { Like } from "../like/like.entity";
+import { PostDataDto } from "./DTO/post-data-dto";
+import { PostInformation, ReportData } from "../graphql";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class PostService {
@@ -12,17 +12,20 @@ export class PostService {
     this.postRepository = postRepository;
   }
 
+  public async parseBearerToken(context, authService): Promise<number> {
+    const req: string = context["req"]["headers"]["authorization"];
+    const PARSE_BEARER_INDEX = 7;
+    if (req !== undefined) {
+      const decode: string = await authService["decodeToken"](req.substr(PARSE_BEARER_INDEX, req.length - PARSE_BEARER_INDEX));
+      return decode["userIndex"];
+    } else {
+      return -1;
+    }
+  }
+
   public async getAllLatestPost(context: object, orderByFlag: number, userService: object, likeService: object, authService: object)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-
-    let userIndex: number = -1;
-    const req: string = context["req"]["headers"]["authorization"];
-    if (req !== undefined) {
-      const token: string = req.substr(7, req.length - 7);
-      const decode: string = await authService["decodeToken"](token);
-      userIndex = decode["userIndex"];
-    }
-
+    const userIndex: number = await this.parseBearerToken(context, authService)
     try {
       const allLatestPost: Post[] = await this.postRepository.find();
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
@@ -37,15 +40,8 @@ export class PostService {
   public async getSpecificExercise(context: object, orderByFlag: number, exercise: number,
                                    userService: object, likeService: object, authService: object)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-
-    let userIndex = -1;
-    const req = context["req"]["headers"]["authorization"];
-    if (req !== undefined) {
-      const token = req.substr(7, req.length - 7);
-      const decode = await authService["decodeToken"](token);
-      userIndex = decode["userIndex"];
-    }
-
+    const PARSE_INDEX = 7;
+    const userIndex: number = await this.parseBearerToken(context, authService);
     try {
       const specificPost: Post[] = await this.postRepository.find({ where: { exercise: exercise, feedOpen: 1 } });
       let returnData: { likeArray: number[]; PostData: PostInformation[] } =
@@ -61,12 +57,7 @@ export class PostService {
 
   public async getMyPost(context: object, userService: object, likeService: object, authService: object)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
-
+    const userIndex: number = await this.parseBearerToken(context, authService);
     try {
       const allMyPost: Post[] = await this.postRepository.find({ where: { userIndex: userIndex, feedOpen: 1 } });
       return await this.parseReturnData(allMyPost, userIndex, userService, likeService);
@@ -99,10 +90,7 @@ export class PostService {
 
   public async addPost(context: object, uploadDate: string, exercise: number, content: string,
                        condition: number, feedOpen: number, authService: object): Promise<boolean> {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const userIndex: number = await this.parseBearerToken(context, authService);
     try {
       await this.postRepository.save(new Post(userIndex, uploadDate, exercise, content, condition, feedOpen).getPostInfo());
       return true;
@@ -113,10 +101,7 @@ export class PostService {
 
   public async likePost(context: object, postIndex: number, isDelete: boolean,
                         likeService: object, authService: object): Promise<boolean> {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const userIndex: number = await this.parseBearerToken(context, authService);
     try {
       if (isDelete) {
         await likeService["deleteLike"](postIndex, userIndex);
@@ -136,12 +121,8 @@ export class PostService {
   }
 
   public async reporting(context: object, authService: object, reportService: object, exerciseService: object): Promise<ReportData> {
-    const req = context["req"]["headers"]["authorization"];
-    const token: string = req.substr(7, req.length - 7);
-    const decode: object = await authService["decodeToken"](token);
-    const userIndex: number = decode["userIndex"];
-
-    // 유저의 최근 5개 기록 조회
+    const userIndex: number = await this.parseBearerToken(context, authService);
+    const MINIMUM_NUMBER_POSTS = 5;
     const posts: Post[] = await this.postRepository.find({
       select: ["condition", "exercise", "uploadDate"],
       where: { userIndex: userIndex },
@@ -149,36 +130,27 @@ export class PostService {
       take: 10
     });
 
-    // 게시글 5개 미만인 경우
-    if (posts.length < 5) {
-      return {
-        reportExist: false
-      }
+    if (posts.length < MINIMUM_NUMBER_POSTS) {
+      return { reportExist: false };
     }
 
     const postData: object = await this.getReportData(posts);
-    const condition = await reportService["getReportData"](postData["condition"]);
-    const exercise = await exerciseService["getExerciseName"](postData["exerciseIndex"]);
-    const date = await this.getDateData(postData["date"]);
-    let exerciseType;
-
-    if (date === true) {
-      exerciseType = "성실하게 꼬박꼬박 하는 편이에요."
-    } else {
-      exerciseType = "지치지 않고 찬찬히 하는 편이에요."
-    }
+    const condition: object = await reportService["getReportData"](postData["condition"]);
+    const exercise: string = await exerciseService["getExerciseName"](postData["exerciseIndex"]);
+    const date: boolean = await this.getDateData(postData["date"]);
+    const exerciseType: string = date === true ? "성실하게 꼬박꼬박 하는 편이에요." : "지치지 않고 찬찬히 하는 편이에요.";
 
     return {
       reportExist: true,
-      conditionMent: condition['ment'],
-      conditionImgURL: condition['imgURL'],
+      conditionMent: condition["ment"],
+      conditionImgURL: condition["imgURL"],
       exerciseName: exercise,
       exerciseType: exerciseType
     };
   }
 
   public async getReportData(posts: Post[]): Promise<object> {
-    const condition = (posts.reduce((acc, x) => acc + x.condition, 0) / 10).toFixed();
+    const condition: string = (posts.reduce((acc, x) => acc + x.condition, 0) / 10).toFixed();
     const exercise = posts.map(node => node.exercise).reduce((acc, x) => {
       acc[x]++;
       return acc;
@@ -186,15 +158,15 @@ export class PostService {
     let mostExercise = exercise[0];
     let exerciseIndex = null;
 
-    for (let i = 1; i < 12; i++) {
+    const EXERCISE_TOTAL_NUMBER = 12;
+    for (let i = 1; i < EXERCISE_TOTAL_NUMBER; i++) {
       if (exercise[i] > mostExercise) {
         mostExercise = exercise[i];
         exerciseIndex = i;
       }
     }
 
-    const date = posts.map(node => node.uploadDate).reverse();
-
+    const date: object = posts.map(node => node.uploadDate).reverse();
     return { condition: condition, exerciseIndex: exerciseIndex, date: date };
   }
 
@@ -203,16 +175,14 @@ export class PostService {
     const newDateList: Date[] = this.stringToDate(dateList);
 
     for (let i = 0; i < newDateList.length - 1; i++) {
-      if(Math.ceil((newDateList[i + 1].getTime() - newDateList[i].getTime()) / (1000 * 3600 * 24)) <= 2) count++;
+      if (Math.ceil((newDateList[i + 1].getTime() - newDateList[i].getTime()) / (1000 * 3600 * 24)) <= 2) count++;
       else count = 1;
     }
-
     return count >= 5;
   }
 
   private stringToDate(dateList: string[]): Date[] {
     return dateList.map(date =>
-      // TODO: Date + 1
       new Date(Number(date.split(".")[0]), Number(date.split(".")[1]) - 1, Number(date.split(".")[2]) + 1)
     );
   }
