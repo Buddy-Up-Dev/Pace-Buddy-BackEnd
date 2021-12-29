@@ -156,7 +156,7 @@ export class UserService {
     }
   }
 
-  private async getUserIndex(context: object, authService: object): Promise<number> {
+  public async getUserIndex(context: object, authService: object): Promise<number> {
     const req: string = context['req']['headers']['authorization'];
     const token: string = req.substr(7, req.length - 7);
     const decode: object = await authService['decodeToken'](token);
