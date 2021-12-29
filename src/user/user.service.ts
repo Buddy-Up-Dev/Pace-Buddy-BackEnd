@@ -105,11 +105,8 @@ export class UserService {
     const userIndex: number = await this.getUserIndex(context, authService);
 
     try {
-      // User 테이블에서 삭제
       await this.userRepository.delete({ userIndex: userIndex });
-      // Post 테이블에서 해당 User 글 삭제
       await postService['deleteUserPost'](userIndex);
-      // Like 테이블에서 해당 User 좋아요 삭제 ()
       await likeService['deleteUserLike'](userIndex);
       return true;
     } catch (e) {
