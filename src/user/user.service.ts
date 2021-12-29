@@ -92,19 +92,17 @@ export class UserService {
   }
 
   public async makeDefaultName(): Promise<string> {
-    const buddy = '버디';
-    let alpha = 65;
-    let nick;
-    const newUserIdx = await this.userRepository.count() + 1;
+    const buddy: string = '버디';
+    const alpha: number = 65;
+    const newUserIdx: number = await this.userRepository.count() + 1;
 
     if (newUserIdx < 10) {
-      nick = String.fromCharCode(alpha).concat('00', String(newUserIdx));
+      return buddy.concat(String.fromCharCode(alpha).concat('00', String(newUserIdx)));
     } else if (newUserIdx < 100) {
-      nick = String.fromCharCode(alpha).concat('0', String(newUserIdx));
+      return buddy.concat(String.fromCharCode(alpha).concat('0', String(newUserIdx)));
     } else {
-      nick = String.fromCharCode(alpha).concat(String(newUserIdx));
+      return buddy.concat(String.fromCharCode(alpha).concat(String(newUserIdx)));
     }
-    return buddy.concat(nick);
   }
 
   // TODO : JWT LOGIC
