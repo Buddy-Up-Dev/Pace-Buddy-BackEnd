@@ -16,7 +16,7 @@ export class UserService {
   }
 
   public async getUserNickname(context: object, authService: object): Promise<string> {
-    const userIndex = await this.getUserIndex(context, authService);
+    const userIndex: number = await this.getUserIndex(context, authService);
 
     const data: object = await this.userRepository.findOne({
       select: ['userName'],
@@ -69,14 +69,12 @@ export class UserService {
   public async addNewUser(userID, loginType): Promise<number> {
     try {
       if (loginType === 'naver') {
-        const newName = this.makeDefaultName();
         const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           naverID: userID
         });
         return newUser.userIndex;
       } else if (loginType === 'kakao') {
-        const newName = this.makeDefaultName();
         const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           kakaoID: userID
@@ -104,7 +102,7 @@ export class UserService {
   }
 
   public async deleteUser(context: object, postService: object, likeService: object, authService: object): Promise<boolean> {
-    const userIndex = await this.getUserIndex(context, authService);
+    const userIndex: number = await this.getUserIndex(context, authService);
 
     try {
       // User 테이블에서 삭제
@@ -120,7 +118,7 @@ export class UserService {
   }
 
   public async uploadProfile(context: object, imgURL: string, authService: object) {
-    const userIndex = await this.getUserIndex(context, authService);
+    const userIndex: number = await this.getUserIndex(context, authService);
 
     try {
       const currUser: object = await this.userRepository.findOne({ where: { userIndex: userIndex } });
@@ -133,7 +131,7 @@ export class UserService {
   }
 
   public async getProfileInfo(context: object, authService: object) {
-    const userIndex = await this.getUserIndex(context, authService);
+    const userIndex: number = await this.getUserIndex(context, authService);
 
     try {
       const info: object = await this.userRepository.findOne({
