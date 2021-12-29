@@ -143,7 +143,7 @@ export class PostService {
     const token: string = req.substr(7, req.length - 7);
     const decode: object = await authService["decodeToken"](token);
     const userIndex: number = decode["userIndex"];
-
+    //const userIndex = 19;
     // 유저의 최근 5개 기록 조회
     const posts: Post[] = await this.postRepository.find({
       select: ["condition", "exercise", "uploadDate"],
@@ -151,6 +151,12 @@ export class PostService {
       order: { uploadDate: "DESC" },
       take: 10
     });
+
+    if (posts.length < 5) {
+      return {
+        reportExist: false
+      }
+    }
 
     const postData: object = await this.getReportData(posts);
     const condition = await reportService["getReportData"](postData["condition"]);
@@ -165,6 +171,7 @@ export class PostService {
     }
 
     return {
+      reportExist: true,
       conditionMent: condition['ment'],
       conditionImgURL: condition['imgURL'],
       exerciseName: exercise,
