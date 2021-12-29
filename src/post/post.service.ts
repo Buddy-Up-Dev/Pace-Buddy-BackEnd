@@ -201,23 +201,41 @@ export class PostService {
 
   public async modifyPost(context: object, postIndex: number, uploadDate: string,
                           exercise: number, content: string, condition: number, feedOpen: number, authService: object): Promise<boolean> {
-    const userIndex: number = await this.parseBearerToken(context, authService);
+    const userIndex = await this.parseBearerToken(context, authService);
     try {
-      await this.postRepository.save({
-        postIndex: postIndex, uploadDate: uploadDate, exercise: exercise,
-        content: content, condition: condition, feedOpen: feedOpen
+      const post: object = await this.postRepository.findOne({
+        select: ["userIndex"],
+        where: { postIndex: postIndex }
       });
-      return true;
+
+      if (post['userIndex'] === userIndex) {
+        await this.postRepository.save({
+          postIndex: postIndex, uploadDate: uploadDate, exercise: exercise,
+          content: content, condition: condition, feedOpen: feedOpen
+        });
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       throw new Error(e);
     }
   }
 
   public async deletePost(context: object, postIndex: number, authService: object): Promise<boolean> {
-    const userIndex: number = await this.parseBearerToken(context, authService);
+    const userIndex = await this.parseBearerToken(context, authService);
     try {
-      await this.postRepository.delete({ postIndex: postIndex });
-      return true;
+      const post: object = await this.postRepository.findOne({
+        select: ["userIndex"],
+        where: { postIndex: postIndex }
+      });
+
+      if (post['userIndex'] === userIndex) {
+        await this.postRepository.delete({ postIndex: postIndex });
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       throw new Error(e);
     }
