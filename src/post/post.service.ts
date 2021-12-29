@@ -1,12 +1,9 @@
 import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
-
 import {Post} from "./post.entity";
 import {Like} from "../like/like.entity";
-
 import {PostDataDto} from "./DTO/post-data-dto";
 import {PostInformation, ReportData} from "../graphql";
-
 import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
