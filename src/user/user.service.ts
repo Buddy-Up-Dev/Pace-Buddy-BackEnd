@@ -92,8 +92,9 @@ export class UserService {
   }
 
   public async makeDefaultName(): Promise<string> {
+    const ASCII_ALPHABET: number = 65;
     const buddy: string = '버디';
-    const alpha: number = 65;
+    let alpha: number = ASCII_ALPHABET;
     const newUserIdx: number = await this.userRepository.count() + 1;
 
     if (newUserIdx < 10) {
