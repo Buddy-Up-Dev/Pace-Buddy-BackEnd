@@ -216,15 +216,7 @@ export class PostService {
   public async deletePost(context: object, postIndex: number, authService: object): Promise<boolean> {
     const userIndex: number = await this.parseBearerToken(context, authService);
     try {
-
-      const post: object = await this.postRepository.findOne({
-        select: ["userIndex"],
-        where: { postIndex: postIndex }
-      });
-
-      console.log('post >', post)
-
-      //await this.postRepository.delete({ postIndex: postIndex });
+      await this.postRepository.delete({ postIndex: postIndex });
       return true;
     } catch (e) {
       throw new Error(e);
