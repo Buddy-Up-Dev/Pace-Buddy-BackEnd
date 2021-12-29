@@ -152,6 +152,7 @@ export class PostService {
       take: 10
     });
 
+    // 게시글 5개 미만인 경우
     if (posts.length < 5) {
       return {
         reportExist: false
