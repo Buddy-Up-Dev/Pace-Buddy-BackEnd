@@ -188,10 +188,7 @@ export class PostService {
   }
 
   public async getMyDate(context: object, authService: object): Promise<string[]> {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const userIndex = await this.parseBearerToken(context, authService);
     try {
       return (await this.postRepository.find({
         select: ["uploadDate"],
@@ -204,10 +201,7 @@ export class PostService {
 
   public async modifyPost(context: object, postIndex: number, uploadDate: string,
                           exercise: number, content: string, condition: number, feedOpen: number, authService: object): Promise<boolean> {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const userIndex = await this.parseBearerToken(context, authService);
     try {
       await this.postRepository.save({
         postIndex: postIndex, uploadDate: uploadDate, exercise: exercise,
@@ -220,10 +214,7 @@ export class PostService {
   }
 
   public async deletePost(context: object, postIndex: number, authService: object): Promise<boolean> {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const userIndex = await this.parseBearerToken(context, authService);
     try {
       await this.postRepository.delete({ postIndex: postIndex });
       return true;
