@@ -15,9 +15,9 @@ export class ReportService {
         select: ['ment', 'imgURL'],
         where: {condition: condition},
       })
-      const ranIdx = Math.floor(Math.random() * 3);
+      const randomIndex = Math.floor(Math.random() * 3);
       const mentList = data['ment'].split(' , ');
-      return { ment: mentList[ranIdx], imgURL: data['imgURL'] };
+      return { ment: mentList[randomIndex], imgURL: data['imgURL'] };
     } catch (e) {
       throw new Error(e);
     }
