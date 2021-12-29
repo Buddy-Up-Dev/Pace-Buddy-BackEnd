@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PostService } from "./post.service";
-import { Post, PostInformation, ReportData } from "../graphql";
+import { PostInformation, ReportData } from "../graphql";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service";
 import { AuthService } from "../auth/auth.service";
@@ -38,7 +38,7 @@ export class PostResolver {
 
   @Query('reporting')
   async reporting(@Context() context: object):
-      Promise<ReportData> {
+    Promise<ReportData> {
     return await this.postService.reporting(context, this.authService, this.reportService, this.exerciseService);
   }
 
@@ -49,13 +49,15 @@ export class PostResolver {
 
   @Mutation('addPost')
   async addPost(@Context() context: object, @Args('uploadDate') uploadDate: string, @Args('exercise') exercise: number,
-      @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
+    @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
   ): Promise<Boolean> {
     return await this.postService.addPost(context, uploadDate, exercise, content, condition, feedOpen, this.authService);
   }
 
   @Mutation('modifyPost')
-  async modifyPost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('uploadDate') uploadDate: string, @Args('exercise') exercise: number, @Args('content') content: string, @Args('condition') condition: number, @Args('feedOpen') feedOpen: number
+  async modifyPost(@Context() context: object, @Args('postIndex') postIndex: number, @Args('uploadDate') uploadDate: string,
+    @Args('exercise') exercise: number, @Args('content') content: string, @Args('condition') condition: number,
+    @Args('feedOpen') feedOpen: number
   ): Promise<Boolean> {
     return await this.postService.modifyPost(context, postIndex, uploadDate, exercise, content, condition, feedOpen, this.authService);
   }

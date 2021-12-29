@@ -1,9 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
-
 import { User } from "./user.entity";
-import { Post } from "../post/post.entity";
-
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
@@ -19,51 +16,52 @@ export class UserService {
   }
 
   public async getUserNickname(context: any, authService: any): Promise<string> {
-    const req = context.req.headers.authorization;
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService.decodeToken(token);
-    const userIndex = decode["userIndex"];
+    const req: string = context['req']['headers']['authorization'];
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService.decodeToken(token);
+    const userIndex: number = decode['userIndex'];
 
-    const [data] = await this.userRepository.find({
-      select: ["userName"],
+    const data: object = await this.userRepository.findOne({
+      select: ['userName'],
       where: { userIndex: userIndex }
     });
-    return data.userName;
+
+    return data['userName'];
   }
 
   public async checkNewUser(userID: string, loginType: string): Promise<object> {
-    if (loginType === "naver") {
+    if (loginType === 'naver') {
       try {
         const [data] = await this.userRepository.find({
-          select: ["userIndex"],
+          select: ['userIndex'],
           where: { naverID: userID }
         });
         // 이미 가입한 유저
         if (data !== undefined) {
-          return { status: "login", userIndex: data.userIndex };
+          return { status: 'login', userIndex: data.userIndex };
         }
         // 새로 가입하는 유저
         else {
           const userIndex = await this.addNewUser(userID, loginType);
-          return { status: "join", userIndex: userIndex };
+          return { status: 'join', userIndex: userIndex };
         }
       } catch (e) {
         throw new Error(e);
       }
-    } else if (loginType === "kakao") {
+    } else if (loginType === 'kakao') {
       try {
         const [data] = await this.userRepository.find({
-          select: ["userIndex"],
+          select: ['userIndex'],
           where: { kakaoID: userID }
         });
         // 이미 가입한 유저
         if (data !== undefined) {
-          return { status: "login", userIndex: data.userIndex };
+          return { status: 'login', userIndex: data.userIndex };
         }
         // 새로 가입하는 유저
         else {
           const userIndex = await this.addNewUser(userID, loginType);
-          return { status: "join", userIndex: userIndex };
+          return { status: 'join', userIndex: userIndex };
         }
       } catch (e) {
         throw new Error(e);
@@ -73,14 +71,14 @@ export class UserService {
 
   public async addNewUser(userID, loginType): Promise<number> {
     try {
-      if (loginType === "naver") {
+      if (loginType === 'naver') {
         const newName = this.makeDefaultName();
         const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           naverID: userID
         });
         return newUser.userIndex;
-      } else if (loginType === "kakao") {
+      } else if (loginType === 'kakao') {
         const newName = this.makeDefaultName();
         const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
@@ -94,19 +92,18 @@ export class UserService {
   }
 
   public async makeDefaultName(): Promise<string> {
-    const buddy = "버디";
-    let alpha = 65;
-    let nick;
-    const newUserIdx = await this.userRepository.count() + 1;
+    const ASCII_ALPHABET: number = 65;
+    const buddy: string = '버디';
+    let alpha: number = ASCII_ALPHABET;
+    const newUserIdx: number = await this.userRepository.count() + 1;
 
     if (newUserIdx < 10) {
-      nick = String.fromCharCode(alpha).concat("00", String(newUserIdx));
+      return buddy.concat(String.fromCharCode(alpha).concat('00', String(newUserIdx)));
     } else if (newUserIdx < 100) {
-      nick = String.fromCharCode(alpha).concat("0", String(newUserIdx));
+      return buddy.concat(String.fromCharCode(alpha).concat('0', String(newUserIdx)));
     } else {
-      nick = String.fromCharCode(alpha).concat(String(newUserIdx));
+      return buddy.concat(String.fromCharCode(alpha).concat(String(newUserIdx)));
     }
-    return buddy.concat(nick);
   }
 
   // TODO : JWT LOGIC
@@ -132,13 +129,13 @@ export class UserService {
   }
 
   public async uploadProfile(context: object, imgURL: string, authService: object) {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const req: string = context['req']['headers']['authorization'];
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService['decodeToken'](token);
+    const userIndex: number = decode['userIndex'];
     try {
-      const currUser = await this.userRepository.findOne({ where: { userIndex: userIndex } });
-      currUser["profileImgURL"] = imgURL;
+      const currUser: object = await this.userRepository.findOne({ where: { userIndex: userIndex } });
+      currUser['profileImgURL'] = imgURL;
       await this.userRepository.save(currUser);
       return true;
     } catch (e) {
@@ -147,24 +144,24 @@ export class UserService {
   }
 
   public async getProfileInfo(context: object, authService: object) {
-    const req = context["req"]["headers"]["authorization"];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService["decodeToken"](token);
-    const userIndex = decode["userIndex"];
+    const req: string = context['req']['headers']['authorization'];
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService['decodeToken'](token);
+    const userIndex: number = decode['userIndex'];
     try {
-      const info = await this.userRepository.findOne({
-        select: ["profileImgURL"],
+      const info: object = await this.userRepository.findOne({
+        select: ['profileImgURL'],
         where: { userIndex: userIndex }
       });
-      if (info["profileImgURL"]) {
+      if (info['profileImgURL']) {
         return {
           hasProfile: true,
-          imgURL: info["profileImgURL"]
+          imgURL: info['profileImgURL']
         };
       } else {
         return {
           hasProfile: false,
-          imgURL: "none"
+          imgURL: 'none'
         };
       }
     } catch (e) {

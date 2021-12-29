@@ -1,12 +1,9 @@
 import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
-
 import {Post} from "./post.entity";
 import {Like} from "../like/like.entity";
-
 import {PostDataDto} from "./DTO/post-data-dto";
 import {PostInformation, ReportData} from "../graphql";
-
 import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
@@ -18,11 +15,11 @@ export class PostService {
   public async getAllLatestPost(context: object, orderByFlag: number, userService: object, likeService: object, authService: object)
     : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
 
-    let userIndex = -1;
-    const req = context["req"]["headers"]["authorization"];
+    let userIndex: number = -1;
+    const req: string = context["req"]["headers"]["authorization"];
     if (req !== undefined) {
-      const token = req.substr(7, req.length - 7);
-      const decode = await authService["decodeToken"](token);
+      const token: string = req.substr(7, req.length - 7);
+      const decode: string = await authService["decodeToken"](token);
       userIndex = decode["userIndex"];
     }
 
