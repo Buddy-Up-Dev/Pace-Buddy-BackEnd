@@ -15,10 +15,10 @@ export class UserService {
     return this.userRepository.findOne({ userIndex: userIndex });
   }
 
-  public async getUserNickname(context: any, authService: any): Promise<string> {
+  public async getUserNickname(context: object, authService: object): Promise<string> {
     const req: string = context['req']['headers']['authorization'];
     const token: string = req.substr(7, req.length - 7);
-    const decode: object = await authService.decodeToken(token);
+    const decode: object = await authService['decodeToken'](token);
     const userIndex: number = decode['userIndex'];
 
     const data: object = await this.userRepository.findOne({
@@ -107,21 +107,20 @@ export class UserService {
   }
 
   // TODO : JWT LOGIC
-  public async deleteUser(context: any, postService: any, likeService: any, authService: any): Promise<boolean> {
-    // const req = context.req.headers.authorization;
-    // const token = req.substr(7, req.length - 7);
-    // const decode = await authService.decodeToken(token);
-    // const userIndex = decode['userIndex'];
+  public async deleteUser(context: object, postService: object, likeService: object, authService: object): Promise<boolean> {
+    // const req: string = context['req']['headers']['authorization'];
+    // const token: string = req.substr(7, req.length - 7);
+    // const decode: object = await authService['decodeToken'](token);
+    // const userIndex: number = decode['userIndex'];
     const userIndex = 18;
 
     try {
       // User 테이블에서 삭제
       await this.userRepository.delete({ userIndex: userIndex });
       // Post 테이블에서 해당 User 글 삭제
-      await postService.deleteUserPost(userIndex);
+      await postService['deleteUserPost'](userIndex);
       // Like 테이블에서 해당 User 좋아요 삭제 ()
-      await likeService.deleteUserLike(userIndex);
-
+      await likeService['deleteUserLike'](userIndex);
       return true;
     } catch (e) {
       throw new Error(e);
