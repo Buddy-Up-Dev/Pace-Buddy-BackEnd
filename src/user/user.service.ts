@@ -69,14 +69,12 @@ export class UserService {
   public async addNewUser(userID, loginType): Promise<number> {
     try {
       if (loginType === 'naver') {
-        const newName = this.makeDefaultName();
         const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           naverID: userID
         });
         return newUser.userIndex;
       } else if (loginType === 'kakao') {
-        const newName = this.makeDefaultName();
         const newUser = await this.userRepository.save({
           userName: await this.makeDefaultName(),
           kakaoID: userID
