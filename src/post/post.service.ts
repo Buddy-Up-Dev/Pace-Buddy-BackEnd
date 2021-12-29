@@ -152,6 +152,13 @@ export class PostService {
       take: 10
     });
 
+    // 게시글 5개 미만인 경우
+    if (posts.length < 5) {
+      return {
+        reportExist: false
+      }
+    }
+
     const postData: object = await this.getReportData(posts);
     const condition = await reportService["getReportData"](postData["condition"]);
     const exercise = await exerciseService["getExerciseName"](postData["exerciseIndex"]);
@@ -165,6 +172,7 @@ export class PostService {
     }
 
     return {
+      reportExist: true,
       conditionMent: condition['ment'],
       conditionImgURL: condition['imgURL'],
       exerciseName: exercise,

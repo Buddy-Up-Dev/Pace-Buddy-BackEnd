@@ -26,10 +26,11 @@ type Exercise {
 }
 
 type ReportData {
-    conditionMent: String!
-    conditionImgURL: String!
-    exerciseName: String!
-    exerciseType: String!
+    reportExist: Boolean!
+    conditionMent: String
+    conditionImgURL: String
+    exerciseName: String
+    exerciseType: String
 }
 
 type ProfileData {

@@ -81,10 +81,11 @@ export class Exercise {
 
 export class ReportData {
     __typename?: 'ReportData';
-    conditionMent: string;
-    conditionImgURL: string;
-    exerciseName: string;
-    exerciseType: string;
+    reportExist: boolean;
+    conditionMent?: Nullable<string>;
+    conditionImgURL?: Nullable<string>;
+    exerciseName?: Nullable<string>;
+    exerciseType?: Nullable<string>;
 }
 
 export class ProfileData {
