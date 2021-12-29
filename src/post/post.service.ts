@@ -23,11 +23,14 @@ export class PostService {
         }
     }
 
-    public async getAllLatestPost(context: object, orderByFlag: number, userService: object, likeService: object, authService: object)
+    public async getAllLatestPost(context: object, orderByFlag: number, offset: number, userService: object, likeService: object, authService: object)
         : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
         const userIndex: number = await this.parseBearerToken(context, authService)
         try {
-            const allLatestPost: Post[] = await this.postRepository.find();
+            const allLatestPost: Post[] = await this.postRepository.find({
+                  skip: offset,
+                  take: 6
+            });
             let returnData: { likeArray: number[]; PostData: PostInformation[] } =
                 await this.parseReturnData(allLatestPost, userIndex, userService, likeService);
             if (orderByFlag === 1) returnData.PostData = this.sortByPopularity(returnData.PostData);
@@ -37,12 +40,16 @@ export class PostService {
         }
     }
 
-    public async getSpecificExercise(context: object, orderByFlag: number, exercise: number,
+    public async getSpecificExercise(context: object, orderByFlag: number, exercise: number, offset: number,
                                      userService: object, likeService: object, authService: object)
         : Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
         const userIndex: number = await this.parseBearerToken(context, authService);
         try {
-            const specificPost: Post[] = await this.postRepository.find({where: {exercise: exercise, feedOpen: 1}});
+            const specificPost: Post[] = await this.postRepository.find({
+                skip: offset,
+                take: 6,
+                where: { exercise: exercise, feedOpen: 1 }
+            });
             let returnData: { likeArray: number[]; PostData: PostInformation[] } =
                 await this.parseReturnData(specificPost, userIndex, userService, likeService);
 

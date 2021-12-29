@@ -1,10 +1,12 @@
 type Query{
     getAllLatestPost(
         flag: Int!
+        offset: Int
     ): PostData!
     getSpecificExercise(
         flag: Int!
         exercise: Int!
+        offset: Int
     ): PostData!
     getMyPost: PostData!
     getExercise: [Exercise]!

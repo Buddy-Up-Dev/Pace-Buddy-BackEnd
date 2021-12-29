@@ -10,9 +10,9 @@
 export abstract class IQuery {
     __typename?: 'IQuery';
 
-    abstract getAllLatestPost(flag: number): PostData | Promise<PostData>;
+    abstract getAllLatestPost(flag: number, offset?: Nullable<number>): PostData | Promise<PostData>;
 
-    abstract getSpecificExercise(flag: number, exercise: number): PostData | Promise<PostData>;
+    abstract getSpecificExercise(flag: number, exercise: number, offset?: Nullable<number>): PostData | Promise<PostData>;
 
     abstract getMyPost(): PostData | Promise<PostData>;
 

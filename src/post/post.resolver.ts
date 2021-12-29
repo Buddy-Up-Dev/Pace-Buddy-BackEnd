@@ -19,15 +19,15 @@ export class PostResolver {
   ) {}
 
   @Query('getAllLatestPost')
-  async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number):
+  async getAllLatestPost(@Context() context: object, @Args('flag') orderByFlag: number, @Args('offset') offset: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getAllLatestPost(context, orderByFlag, this.userService, this.likeService, this.authService);
+    return await this.postService.getAllLatestPost(context, orderByFlag, offset, this.userService, this.likeService, this.authService);
   }
 
   @Query('getSpecificExercise')
-  async getSpecificExercise(@Context() context: object, @Args('flag') orderByFlag: number, @Args('exercise') exercise: number):
+  async getSpecificExercise(@Context() context: object, @Args('flag') orderByFlag: number, @Args('exercise') exercise: number, @Args('offset') offset: number):
     Promise<{ likeArray: number[]; PostData: PostInformation[] }> {
-    return await this.postService.getSpecificExercise(context, orderByFlag, exercise, this.userService, this.likeService, this.authService);
+    return await this.postService.getSpecificExercise(context, orderByFlag, exercise, offset, this.userService, this.likeService, this.authService);
   }
 
   @Query('getMyPost')
