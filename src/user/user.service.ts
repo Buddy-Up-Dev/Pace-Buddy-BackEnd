@@ -130,12 +130,12 @@ export class UserService {
   }
 
   public async uploadProfile(context: object, imgURL: string, authService: object) {
-    const req = context['req']['headers']['authorization'];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService['decodeToken'](token);
-    const userIndex = decode['userIndex'];
+    const req: string = context['req']['headers']['authorization'];
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService['decodeToken'](token);
+    const userIndex: number = decode['userIndex'];
     try {
-      const currUser = await this.userRepository.findOne({ where: { userIndex: userIndex } });
+      const currUser: object = await this.userRepository.findOne({ where: { userIndex: userIndex } });
       currUser['profileImgURL'] = imgURL;
       await this.userRepository.save(currUser);
       return true;
