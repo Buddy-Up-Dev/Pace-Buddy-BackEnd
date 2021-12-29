@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PostService } from "./post.service";
-import { Post, PostInformation, ReportData } from "../graphql";
+import { PostInformation, ReportData } from "../graphql";
 import { UserService } from "../user/user.service";
 import { LikeService } from "../like/like.service";
 import { AuthService } from "../auth/auth.service";
