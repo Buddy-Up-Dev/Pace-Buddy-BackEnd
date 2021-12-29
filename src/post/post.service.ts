@@ -158,7 +158,7 @@ export class PostService {
     const date = await this.getDateData(postData["date"]);
     let exerciseType;
 
-    if (date == true) {
+    if (date === true) {
       exerciseType = "성실하게 꼬박꼬박 하는 편이에요."
     } else {
       exerciseType = "지치지 않고 찬찬히 하는 편이에요."
