@@ -14,7 +14,7 @@ export class AuthService {
       method: 'GET',
       headers: { 'Authorization' : `Bearer ${accessToken}` }
     })
-    const result = await response.text();
+    const result: string = await response.text();
 
     try {
       if (response.status === 200) {
@@ -29,14 +29,11 @@ export class AuthService {
   }
 
   public async kakaoLogin(accessToken: string, userService: any): Promise<string> {
-    // userInfo(id) 조회
     const response = await fetch('https://kapi.kakao.com/v2/user/me', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${accessToken}` }
     })
     const result = await response.text();
-
-    // 회원가입 및 로그인
     try {
       if (response.status === 200) {
         const userInfo: object = await userService.checkNewUser(JSON.parse(result).id, 'kakao');
