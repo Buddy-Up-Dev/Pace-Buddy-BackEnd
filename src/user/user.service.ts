@@ -145,12 +145,12 @@ export class UserService {
   }
 
   public async getProfileInfo(context: object, authService: object) {
-    const req = context['req']['headers']['authorization'];
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService['decodeToken'](token);
-    const userIndex = decode['userIndex'];
+    const req: string = context['req']['headers']['authorization'];
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService['decodeToken'](token);
+    const userIndex: number = decode['userIndex'];
     try {
-      const info = await this.userRepository.findOne({
+      const info: object = await this.userRepository.findOne({
         select: ['profileImgURL'],
         where: { userIndex: userIndex }
       });
