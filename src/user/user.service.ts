@@ -16,16 +16,17 @@ export class UserService {
   }
 
   public async getUserNickname(context: any, authService: any): Promise<string> {
-    const req = context.req.headers.authorization;
-    const token = req.substr(7, req.length - 7);
-    const decode = await authService.decodeToken(token);
-    const userIndex = decode["userIndex"];
+    const req: string = context.req.headers.authorization;
+    const token: string = req.substr(7, req.length - 7);
+    const decode: object = await authService.decodeToken(token);
+    const userIndex: number = decode["userIndex"];
 
-    const [data] = await this.userRepository.find({
+    const data: object = await this.userRepository.findOne({
       select: ["userName"],
       where: { userIndex: userIndex }
     });
-    return data.userName;
+
+    return data['userName'];
   }
 
   public async checkNewUser(userID: string, loginType: string): Promise<object> {
