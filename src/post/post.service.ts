@@ -198,7 +198,8 @@ export class PostService {
         try {
             return (await this.postRepository.find({
                 select: ["uploadDate"],
-                where: {userIndex: userIndex}
+                where: {userIndex: userIndex},
+                order: {uploadDate: "ASC"}
             })).map(node => node.uploadDate);
         } catch (e) {
             throw new Error(e);
