@@ -143,7 +143,7 @@ export class PostService {
     const token: string = req.substr(7, req.length - 7);
     const decode: object = await authService["decodeToken"](token);
     const userIndex: number = decode["userIndex"];
-    //const userIndex = 19;
+
     // 유저의 최근 5개 기록 조회
     const posts: Post[] = await this.postRepository.find({
       select: ["condition", "exercise", "uploadDate"],
