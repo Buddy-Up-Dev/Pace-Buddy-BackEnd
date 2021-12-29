@@ -19,7 +19,7 @@ export class ExerciseService {
 
   public async getExerciseName(exerciseIndex: number): Promise<String> {
     try {
-      const data = await this.exerciseRepository.findOne({
+      const data: object = await this.exerciseRepository.findOne({
           select: ['exerciseName'],
           where: { exerciseIndex: exerciseIndex }
       });
