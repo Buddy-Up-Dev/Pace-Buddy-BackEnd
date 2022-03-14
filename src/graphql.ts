@@ -10,9 +10,9 @@
 export abstract class IQuery {
     __typename?: 'IQuery';
 
-    abstract getAllLatestPost(flag: number): PostData | Promise<PostData>;
+    abstract getAllLatestPost(flag: number, offset?: Nullable<number>): PostData | Promise<PostData>;
 
-    abstract getSpecificExercise(flag: number, exercise: number): PostData | Promise<PostData>;
+    abstract getSpecificExercise(flag: number, exercise: number, offset?: Nullable<number>): PostData | Promise<PostData>;
 
     abstract getMyPost(): PostData | Promise<PostData>;
 
@@ -81,10 +81,11 @@ export class Exercise {
 
 export class ReportData {
     __typename?: 'ReportData';
-    conditionMent: string;
-    conditionImgURL: string;
-    exerciseName: string;
-    exerciseType: string;
+    reportExist: boolean;
+    conditionMent?: Nullable<string>;
+    conditionImgURL?: Nullable<string>;
+    exerciseName?: Nullable<string>;
+    exerciseType?: Nullable<string>;
 }
 
 export class ProfileData {

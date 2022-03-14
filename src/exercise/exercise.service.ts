@@ -19,11 +19,11 @@ export class ExerciseService {
 
   public async getExerciseName(exerciseIndex: number): Promise<String> {
     try {
-      const data = await this.exerciseRepository.findOne({
-          select: ['exerciseName'],
-          where: { exerciseIndex: exerciseIndex }
+      const data: object = await this.exerciseRepository.findOne({
+        select: ["exerciseName"],
+        where: { exerciseIndex: exerciseIndex }
       });
-      return data['exerciseName'];
+      return data["exerciseName"];
     } catch (e) {
       throw new Error(e);
     }
